@@ -1,6 +1,6 @@
 # IA Hackathon Project NASA
 
-* Download Project
+## Download Project
 
 ```bash
 git clone https://github.com/i-am-sergio/ia_hackathon_project.git

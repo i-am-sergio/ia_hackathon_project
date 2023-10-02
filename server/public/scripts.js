@@ -12,9 +12,7 @@ let modelo = null;
 //   console.log("Modelo cargado");
 // })();
 
-window.onload = async () => {
-  await mostrarCamara();
-};
+window.onload = async () => await mostrarCamara();
 
 const mostrarCamara = async () => {
   const opciones = {

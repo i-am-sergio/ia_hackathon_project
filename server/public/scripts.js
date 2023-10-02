@@ -1,25 +1,23 @@
 const tamano = 400;
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
-const otrocanvas = document.getElementById("otrocanvas");
 const ctx = canvas.getContext("2d");
 let currentStream = null;
 let facingMode = "user";
-
 let modelo = null;
 
-// (async() => {
-//   console.log("Cargando modelo...");
+// (async () => {
+//   console.log("Cargando modelo de Red Neuronal...");
 //   modelo = await tf.loadLayersModel("model.json");
 //   console.log("Modelo cargado");
 // })();
 
-window.onload = function () {
-  mostrarCamara();
+window.onload = async () => {
+  await mostrarCamara();
 };
 
-function mostrarCamara() {
-  let opciones = {
+const mostrarCamara = async () => {
+  const opciones = {
     audio: false,
     video: {
       width: tamano,
@@ -28,57 +26,60 @@ function mostrarCamara() {
   };
 
   if (navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices
-      .getUserMedia(opciones)
-      .then(function (stream) {
-        currentStream = stream;
-        video.srcObject = currentStream;
-        procesarCamara();
-        // predecir();
-      })
-      .catch(function (err) {
-        alert("No se pudo utilizar la camara :(");
-        console.log(err);
-        alert(err);
-      });
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(opciones);
+      handleUserMedia(stream);
+    } catch (err) {
+      handleError(err);
+    }
   } else {
-    alert("No existe la funcion getUserMedia");
+    alert("No existe la función getUserMedia");
   }
-}
+};
 
-function cambiarCamara() {
+const handleUserMedia = (stream) => {
+  currentStream = stream;
+  video.srcObject = currentStream;
+  procesarCamara();
+  // predecir();
+};
+
+const handleError = (err) => {
+  alert("No se pudo utilizar la cámara :(");
+  console.error(err);
+  alert(err);
+};
+
+const cambiarCamara = async () => {
   if (currentStream) {
-    currentStream.getTracks().forEach((track) => {
-      track.stop();
-    });
+    currentStream.getTracks().forEach((track) => track.stop());
   }
 
-  facingMode = facingMode == "user" ? "environment" : "user";
+  facingMode = facingMode === "user" ? "environment" : "user";
 
-  let opciones = {
+  const opciones = {
     audio: false,
     video: {
-      facingMode: facingMode,
+      facingMode,
       width: tamano,
       height: tamano,
     },
   };
 
-  navigator.mediaDevices
-    .getUserMedia(opciones)
-    .then(function (stream) {
-      currentStream = stream;
-      video.srcObject = currentStream;
-    })
-    .catch(function (err) {
-      console.log("Oops, hubo un error", err);
-    });
-}
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(opciones);
+    handleUserMedia(stream);
+  } catch (err) {
+    console.error("Oops, hubo un error", err);
+  }
+};
 
-function procesarCamara() {
+const procesarCamara = () => {
   ctx.drawImage(video, 0, 0, tamano, tamano, 0, 0, tamano, tamano);
   setTimeout(procesarCamara, 20);
-}
+};
+
+
 /*
 function predecir() {
     if (modelo != null) {
@@ -195,3 +196,4 @@ function resample_single(canvas, width, height, resize_canvas) {
     ctx2.putImageData(img2, 0, 0);
 }
 */
+

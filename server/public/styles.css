@@ -1,4 +1,8 @@
-#id {
+:root{
+    background-color: #000;
+}
+
+#video {
     width: 1px;
 }
 

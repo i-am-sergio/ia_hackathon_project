@@ -1,0 +1,11 @@
+:root{
+    background-color: #000;
+}
+
+#video {
+    width: 1px;
+}
+
+#canvas {
+    max-width: 100%;
+}

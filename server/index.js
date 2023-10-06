@@ -6,6 +6,7 @@ const puerto = 3000; // Puedes cambiar el número de puerto según tus preferenc
 
 // Configuración para servir archivos estáticos (como tu archivo HTML)
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/model', express.static(path.join(__dirname, 'model')));
 
 // Ruta para manejar solicitudes GET a la raíz y enviar el archivo HTML
 app.get('/', (req, res) => {

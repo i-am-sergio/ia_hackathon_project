@@ -84,5 +84,5 @@ Luego, ejecuta el siguiente comando en tu entorno conda "Flowers":
 ```
 Si la instalación se realizó con éxito, deberías ver una salida que indica si se ha encontrado una GPU o si TensorFlow está utilizando la CPU. Como esta salida:
 
-![Salida de ejecución de Prueba de GPU](img/test.png)
+![Salida de ejecución de Prueba de GPU](neural_red/img/test.png)
 

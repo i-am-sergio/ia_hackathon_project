@@ -1,2 +1,5 @@
 server/node_modules
-neural_red/flowers
+neural_red/flowers/Original
+neural_red/flowers/Test
+neural_red/flowers/Train
+neural_red/flowers/Validate

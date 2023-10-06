@@ -1,36 +1,4 @@
-# IA Hackathon Project NASA
-
-## Download Project
-
-```bash
-git clone https://github.com/i-am-sergio/ia_hackathon_project.git
-```
-* Cambia el nombre_de_tu_rama por tu nombre
-```bash
-git branch nombre_de_tu_rama
-```
-```bash
-git checkout nombre_de_tu_rama
-```
-
-* Para preparar tus cambios a subir
-```bash
-git add .
-```
-
-* Para describir tus cambios:
-```bash
-git commit -m "descripcion de tus cambios"
-```
-
-* Para subir tus cambios a github:
-```bash
-git push origin nombre_de_tu_rama
-```
-
-## Deep Learning
-
-### Instalación del Entorno Conda "Flowers"
+## Instalación del Entorno Conda "Flowers"
 
 1. Descarga e instala Anaconda desde [el sitio web oficial](https://www.anaconda.com/download).
 
@@ -66,7 +34,7 @@ git push origin nombre_de_tu_rama
    ```
 
 
-#### Verificación de la Instalación de TensorFlow
+### Verificación de la Instalación de TensorFlow
 Para verificar si TensorFlow se ha instalado correctamente, puedes copiar y pegar el siguiente código en un archivo llamado main.py:
 ```python
     import tensorflow as tf
@@ -84,5 +52,4 @@ Luego, ejecuta el siguiente comando en tu entorno conda "Flowers":
 ```
 Si la instalación se realizó con éxito, deberías ver una salida que indica si se ha encontrado una GPU o si TensorFlow está utilizando la CPU. Como esta salida:
 
-![Salida de ejecución de Prueba de GPU](neural_red/img/test.png)
-
+![Salida de ejecución de Prueba de GPU](img/test.png)

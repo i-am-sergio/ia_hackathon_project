@@ -1,12 +1,12 @@
-import './App.css'
-import Ejemplo from './components/Ejemplo'
+import './App.css';
+import { Register } from './pages';
 
 function App() {
 
   return (
     <>
       <div>
-        <Ejemplo />
+        <Register />
       </div>
     </>
   )

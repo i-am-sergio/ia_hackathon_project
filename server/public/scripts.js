@@ -78,7 +78,6 @@ const procesarCamara = () => {
 };
 
 
-
 function predecir() {
     if (modelo != null) {
     resample_single(canvas, 100, 100, otrocanvas);

@@ -8,15 +8,21 @@ TEST_DIR = "./Test"
 VAL_DIR = "./Validate"
 
 # data augmemtation and prepration
+
 train_datagen = ImageDataGenerator(
                     rescale = 1. / 255,
                     shear_range = 0.2,
                     zoom_range=0.2 ,
                     horizontal_flip=True)
 train_set = train_datagen.flow_from_directory(TRAIN_DIR, target_size=(224,224), batch_size=32 , class_mode='categorical')
-val_datagen = ImageDataGenerator(rescale = 1. / 255)
-val_set = val_datagen.flow_from_directory(VAL_DIR, target_size=(224,224), batch_size=32 , class_mode='categorical')
 
+
+
+val_datagen = ImageDataGenerator(rescale = 1. / 255)
+
+val_set = val_datagen.flow_from_directory(VAL_DIR, target_size=(224,224), batch_size=32 , class_mode='categorical')
+print("Número de muestras de entrenamiento:", len(train_set))
+print("Número de muestras de validación:", len(val_set))
 # build the model
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Conv2D(filters=32 , kernel_size = (5,5) , padding='Same', activation='relu', input_shape=[224,224,3])  )
@@ -35,19 +41,25 @@ model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2), strides=(2,2) ))
 model.add(tf.keras.layers.Dropout(0.5))
 
 #Flatten before the Dense layer
+
 model.add(tf.keras.layers.Flatten())
+
 model.add(tf.keras.layers.Dense (units=512 , activation='relu'))
 
 # the last layer
-model.add(tf.keras.layers.Dense(units=5 , activation='softmax'))
+model.add(tf.keras.layers.Dense(units=10 , activation='softmax'))
+
 print( model.summary())
 
 # compile the model 
 model.compile(optimizer='rmsprop' , loss='categorical_crossentropy' , metrics=['accuracy']   )
+
 history = model.fit (x=train_set, validation_data=val_set, batch_size=32 , epochs=20)
+
 
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
+
 loss = history.history['loss']
 val_loss = history.history['val_loss']
 
@@ -74,5 +86,5 @@ plt.title('Training and validation Loss')
 
 plt.show()
 
-#save the model :
+#lets stop and run again
 model.save('./flowers.h5')

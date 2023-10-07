@@ -1,8 +1,9 @@
 import React from 'react'
+import { AiFillFacebook } from "react-icons/ai"
 
 function LoginPage() {
   return (
-    <div>LoginPage</div>
+    <div>LoginPage<AiFillFacebook /></div>
   )
 }
 

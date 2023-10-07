@@ -39,7 +39,7 @@ function RegisterPage() {
       lastName,
       termsAccepted,
     } = formData;
-  
+
     return (
       username !== "" &&
       email !== "" &&
@@ -50,10 +50,10 @@ function RegisterPage() {
       termsAccepted
     );
   }, [formData]);
-  
+
   useEffect(() => {
     setIsButtonDisabled(!isFormValid());
-  }, [formData, isFormValid]);   
+  }, [formData, isFormValid]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -63,7 +63,7 @@ function RegisterPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <img src={applogo} className={styles.appLogo}/>
+        <img src={applogo} className={styles.appLogo} />
         <div className={styles.text}>Registrarse</div>
         <div className={styles.underline}></div>
       </div>
@@ -136,16 +136,16 @@ function RegisterPage() {
         </div>
         <div className={styles.input}>
           <BsGenderAmbiguous className={styles.img} />
-            <select
-              name="gender"
-              className={styles.entry}
-              value={formData.gender}
-              onChange={handleInputChange}
-            >
-              <option value="male">Masculino</option>
-              <option value="female">Femenino</option>
-              <option value="other">Otro</option>
-            </select>
+          <select
+            name="gender"
+            className={styles.entry}
+            value={formData.gender}
+            onChange={handleInputChange}
+          >
+            <option value="male">Masculino</option>
+            <option value="female">Femenino</option>
+            <option value="other">Otro</option>
+          </select>
         </div>
         <div className={styles.input}>
           <label>
@@ -175,7 +175,7 @@ function RegisterPage() {
       </div>
       <div className={styles.powered}>
         <div className={styles.image} onClick={handleSubmit}>
-          <img src={logo} className={styles.logo}/>
+          <img src={logo} className={styles.logo} />
         </div>
         <div className={styles.message}>DEVOPSX100PRE</div>
       </div>

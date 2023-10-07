@@ -1,20 +1,132 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Server</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flower Recognition</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 </head>
 <body>
-    <button class="btn btn-primary mb-2" id="cambiar-camara" onclick="cambiarCamara();">Cambiar camara</button>
-    
-    <video id="video" playsinline autoplay></video>
-    <canvas id="canvas" width="400" height="400"></canvas>
-    <canvas id="otrocanvas" width="100" height="100"></canvas>
-    <div id="resultado"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-    <script src="scripts.js"></script>
+<script>
+  // Flower categories
+  const flowerCategories = ['aster', 'daffodil', 'dahlia', 'daisy', 'dandelion', 'iris', 'orchid', 'rose', 'sunflower', 'tulip'];
+
+  let video;
+  let canvas;
+  let context;
+  let model;
+  let currentCamera = 'user'; // 'user' for front camera, 'environment' for back camera
+
+  async function init() {
+    video = document.createElement('video');
+    document.body.appendChild(video);
+
+    // Set canvas size to match video
+    canvas = document.createElement('canvas');
+    document.body.appendChild(canvas);
+    context = canvas.getContext('2d');
+
+    // Load the model
+    model = await loadModel();
+
+    // Initialize the camera
+    await initializeCamera();
+  }
+
+  // Load the model
+  async function loadModel() {
+    return await tf.loadLayersModel('/modelflowers/model.json');
+  }
+
+  // Initialize the camera
+  async function initializeCamera() {
+    const constraints = {
+      video: {
+        facingMode: currentCamera,
+      },
+    };
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      video.srcObject = stream;
+      await video.play();
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+    }
+  }
+
+  // Capture and predict
+  async function captureAndPredict() {
+    // Set canvas size to match video (in case it was resized)
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const img = tf.browser.fromPixels(canvas);
+
+    // Make a prediction
+    const predictedClass = await predictImage(model, img);
+
+    // Display the result
+    alert('Prediction: ' + flowerCategories[predictedClass]);
+  }
+
+  // Preprocess the image
+  function preprocessImage(img) {
+    const resizedImg = tf.image.resizeBilinear(img, [224, 224]).toFloat();
+    const normalizedImg = resizedImg.div(tf.scalar(255));
+    const preprocessedImg = normalizedImg.expandDims();
+    return preprocessedImg;
+  }
+
+  // Make a prediction
+  async function predictImage(model, img) {
+    const processedImg = preprocessImage(img);
+    const predictions = await model.predict(processedImg).data();
+    const predictedClass = predictions.indexOf(Math.max(...predictions));
+    return predictedClass;
+  }
+
+  // Toggle between front and back cameras
+  function toggleCamera() {
+    if (currentCamera === 'user') {
+      currentCamera = 'environment';
+    } else {
+      currentCamera = 'user';
+    }
+
+    // Stop the current stream
+    if (video.srcObject) {
+      const stream = video.srcObject;
+      const tracks = stream.getTracks();
+      tracks.forEach(track => track.stop());
+    }
+
+    // Initialize the camera with the new facing mode
+    initializeCamera();
+  }
+
+  // Stop the video stream when the page is closed
+  window.onbeforeunload = function () {
+    if (video && video.srcObject) {
+      const stream = video.srcObject;
+      const tracks = stream.getTracks();
+      tracks.forEach(track => track.stop());
+      video.srcObject = null;
+    }
+  };
+
+  // Initialize the camera and model
+  window.onload = init;
+</script>
+
+<!-- Video element for camera -->
+<video style="display:none;"></video>
+
+<!-- Buttons -->
+<button onclick="captureAndPredict()">Capture and Predict</button>
+<button onclick="toggleCamera()">Toggle Camera</button>
+
 </body>
 </html>

@@ -9,7 +9,7 @@ flower_categories = ['aster', 'daffodil', 'dahlia', 'daisy', 'dandelion', 'iris'
 # Load the saved model
 model = tf.keras.models.load_model('./flowers.h5')
 
-img_dir = "./AdobeStock_45549555-scaled.jpeg"
+img_dir = "./Original/sunflower/10862313945_e8ed9202d9_m.jpg"
 test_image = Image.open(img_dir)
 test_image = test_image.resize((224, 224))  # Resize to match the model's input size
 test_image = np.array(test_image)
@@ -18,24 +18,25 @@ test_image = test_image / 255.0  # Normalize the pixel values to be in the range
 test_image = np.expand_dims(test_image, axis=0)
 
 result = model.predict(test_image)
+messaje = '*** The Flower is an'
 print(result)
 if result[0][0] >= 0.5:
-    print('*** The Flower is an', flower_categories[0])
+    print(messaje, flower_categories[0])
 elif result[0][1] >= 0.5:
-    print('*** The Flower is an', flower_categories[1])
+    print(messaje, flower_categories[1])
 elif result[0][2] >= 0.5:
-    print('*** The Flower is a', flower_categories[2])
+    print(messaje, flower_categories[2])
 elif result[0][3] >= 0.5:
-    print('*** The Flower is a', flower_categories[3])
+    print(messaje, flower_categories[3])
 elif result[0][4] >= 0.5:
-    print('*** The Flower is a', flower_categories[4])
+    print(messaje, flower_categories[4])
 elif result[0][5] >= 0.5:
-    print('*** The Flower is an', flower_categories[5])
+    print(messaje, flower_categories[5])
 elif result[0][6] >= 0.5:
-    print('*** The Flower is an', flower_categories[6])
+    print(messaje, flower_categories[6])
 elif result[0][7] >= 0.5:
-    print('*** The Flower is a', flower_categories[7])
+    print(messaje, flower_categories[7])
 elif result[0][8] >= 0.5:
-    print('*** The Flower is a', flower_categories[8])
+    print(messaje, flower_categories[8])
 elif result[0][9] >= 0.5:
-    print('*** The Flower is a', flower_categories[9])
+    print(messaje, flower_categories[9])

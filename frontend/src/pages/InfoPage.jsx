@@ -3,7 +3,7 @@ import MostrarObjetoInfo from '../components/MostrarObjetoInfo';
 import '../css/InfoPageEstilo.css'; // Importa tus estilos CSS
 
 
-function InfoApp() {
+function InfoPage() {
   // Estado para almacenar información del objeto
   const [infoObjeto, setInfoObjeto] = useState({
     nombre: 'Nombre del Objeto',
@@ -25,4 +25,4 @@ function InfoApp() {
   );
 }
 
-export default InfoApp;
+export default InfoPage;

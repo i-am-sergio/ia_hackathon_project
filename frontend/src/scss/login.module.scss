@@ -10,42 +10,44 @@ body {
     flex-direction: column;
     margin: auto;
     margin-top: 50px;
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     background: $white;
-    padding-bottom: 30px;
+    padding: 30px;
 
     .header {
+        text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 9px;
         width: 100%;
         max-width: 600px;
-        margin-top: 30px;
+        margin-top: 10px;
 
         .text {
             color: map-get($colors, text);
-            font-size: 48px;
+            font-size: 2rem;
             font-weight: 700;
         }
 
         .appLogo {
-            width: 80px;
+            width: 60px;
             height: auto;
-            margin-top: -20px;
-            margin-bottom: -20px;
+            margin-top: -10px;
+            margin-bottom: -10px;
         }
 
         .underline {
-            width: 61px;
-            height: 6px;
+            width: 40px;
+            height: 4px;
             background: map-get($colors, text_darkness);
             border-radius: 9px;
         }
     }
 
     .inputs {
-        margin-top: 55px;
+        margin-top: 30px;
         display: flex;
         flex-direction: column;
         gap: 25px;
@@ -61,51 +63,35 @@ body {
             border-radius: 6px;
 
             .img {
-                margin: 0 30px;
+                margin-right: 20px;
+                margin-left: 20px;
             }
-
             .entry {
-                width: 90%;
+                width: 100%;
                 max-width: 400px;
                 height: 50px;
                 background: transparent;
                 border: none;
                 outline: none;
                 color: $gray;
-                font-size: 19px;
-            }
-
-            input[type="checkbox"] {
-                margin-right: 10px;
-                appearance: none;
-                width: 20px;
-                height: 20px;
-                background-color: $white_d;
-                border: 2px solid $gray;
-                border-radius: 4px;
-
-                &:checked {
-                    background-color: map-get($colors, text_darkness);
-                    border: none;
-                }
+                font-size: 16px;
             }
 
             label {
                 display: flex;
                 align-items: center;
-                font-size: 19px;
+                font-size: 16px;
                 color: $gray;
             }
         }
     }
 
     .forgot_password {
-        padding-left: 62px;
-        margin-top: 27px;
+        text-align: center;
+        margin-top: 20px;
         color: $gray;
-        font-size: 18px;
-
-        & span {
+        font-size: 14px;
+        &span {
             color: map-get($colors, text_darkness);
             cursor: pointer;
         }
@@ -113,6 +99,7 @@ body {
         &:hover {
             span {
                 color: map-get($colors, text);
+                cursor: pointer;
             }
         }
     }
@@ -120,19 +107,19 @@ body {
     .submit_container {
         display: flex;
         gap: 30px;
-        margin: 60px auto;
-
+        margin: 40px auto;
         .submit {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 220px;
-            height: 59px;
+            height: 50px;
             color: #fff;
             background: map-get($colors, text);
             border-radius: 50px;
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 700;
+            padding: 12px 0;
             cursor: pointer;
         }
 
@@ -144,23 +131,23 @@ body {
 
     .powered {
         display: flex;
+        text-align: center;
         flex-direction: column;
         align-items: center;
         justify-content: flex-end;
-        margin-top: 20px;
+        margin-top: 10px;
 
         .image {
-            margin-top: 10px;
             cursor: pointer;
 
             .logo {
-                width: 50px;
+                width: 40px;
                 height: auto;
             }
         }
 
         .message {
-            font-size: 14px;
+            font-size: 12px;
             color: $gray;
         }
     }
@@ -176,7 +163,7 @@ body {
         margin-top: 5vh;
 
         .text {
-            font-size: 6vw;
+            font-size: 1rem !important;
         }
 
         .appLogo {
@@ -194,18 +181,18 @@ body {
 
         .input {
             width: 100%;
-
+            height: 5vh !important;
             .img {
                 margin: 0 3vw;
             }
 
             .entry {
                 width: 100%;
-                font-size: 3vw;
+                font-size: 2.5vw !important;
             }
 
             label {
-                font-size: 3vw;
+                font-size: 3vw !important;
             }
         }
     }
@@ -216,17 +203,16 @@ body {
     }
 
     .submit_container {
-        margin: 5vh auto;
+        margin: 2vh auto !important;
         flex-direction: column;
-
         .submit {
-            width: 100%;
-            font-size: 4vw;
+            width: 25vw !important;
+            height: 4vh !important;
+            font-size: 2.8vw !important;
+            border-radius: 10px !important;
         }
-
         .gray {
-            width: 100%;
-            font-size: 4vw;
+        width: 100%;
         }
     }
 }

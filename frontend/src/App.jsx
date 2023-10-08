@@ -9,7 +9,7 @@ import Navigation from './components/Navigation';
 import InfoPage from './pages/InfoPage';
 
 // export const URL = "http://localhost:3000";
-export const URL = "https://0qh1s63v-3000.brs.devtunnels.ms";
+export const URL = "https://4755h63w-3000.brs.devtunnels.ms";
 
 function App() {
 return (

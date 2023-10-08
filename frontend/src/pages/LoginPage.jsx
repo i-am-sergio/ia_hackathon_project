@@ -3,6 +3,7 @@ import { MdEmail } from "react-icons/md";
 import { BsKeyFill } from "react-icons/bs";
 import { useState, useEffect, useCallback } from "react";
 import { logo, applogo } from "../assets";
+import { Link } from "react-router-dom";
 
 function LoginPage() { // Cambiando el nombre de la función
   const [formData, setFormData] = useState({
@@ -76,7 +77,7 @@ function LoginPage() { // Cambiando el nombre de la función
         >
           Iniciar Sesión
         </div>
-        <div className={`${styles.submit} ${styles.gray}`}>Registrarse</div>
+        <Link to="/register" className={`${styles.submit}`}>Registrarse</Link>
       </div>
       <div className={styles.powered}>
         <div className={styles.image} onClick={handleSubmit}>

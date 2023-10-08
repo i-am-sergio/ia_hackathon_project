@@ -16,6 +16,9 @@ function Navigation() {
         <li className='mr-4 mt-4 px-2 py-2 rounded-sm bg-slate-300'>
           <Link to="/info">InfoPage</Link>
         </li>
+        <li className='mr-4 mt-4 px-2 py-2 rounded-sm bg-slate-300'>
+          <Link to="/camera">Camera</Link>
+        </li>
       </ul>
     </nav>
   );

@@ -58,6 +58,14 @@ app.post('/upload', upload.single('photo'), (req, res) => {
 
     // Puedes realizar cualquier procesamiento adicional aquí, si es necesario
 
+    // 1 cargar el model.json
+    // 2 Hacer la prediccion
+    // 3 Devolver la respuesta
+    
+    // let respuesta;
+    // res.json({
+      //   "laprediccion": respuesta;       
+      // })
     res.send('Imagen recibida y procesada con éxito');
   });
 });

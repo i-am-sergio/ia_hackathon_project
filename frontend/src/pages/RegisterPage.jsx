@@ -34,7 +34,6 @@ function RegisterPage() {
       username,
       email,
       password,
-      confirmPassword,
       firstName,
       lastName,
       termsAccepted,
@@ -44,7 +43,6 @@ function RegisterPage() {
       username !== "" &&
       email !== "" &&
       password !== "" &&
-      confirmPassword !== "" &&
       firstName !== "" &&
       lastName !== "" &&
       termsAccepted
@@ -98,17 +96,6 @@ function RegisterPage() {
             placeholder="Contraseña"
             name="password"
             value={formData.password}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className={styles.input}>
-          <BsKeyFill className={styles.img} />
-          <input
-            type="password"
-            className={styles.entry}
-            placeholder="Confirmar contraseña"
-            name="confirmPassword"
-            value={formData.confirmPassword}
             onChange={handleInputChange}
           />
         </div>

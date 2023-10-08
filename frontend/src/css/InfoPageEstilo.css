@@ -1,0 +1,39 @@
+.pagina-info {
+  background-image: url('https://elbuho.pe/wp-content/uploads/2022/10/arequipa-observatorio-rayos-gamma-referencial.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: rgba(0, 0, 128, 0.7); /* Color de fondo azul oscuro semi-transparente */
+  color: #ffffff; /* Color de texto blanco */
+
+  padding: 20px; /* Espaciado interior para el contenido */
+  text-align: center; /* Centra el contenido en el centro de la página */
+}
+
+.pagina-info h1 {
+  font-size: 24px;
+  margin: 0 0 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.2); /* Fondo blanco semi-transparente para el título */
+  border-radius: 5px; /* Bordes redondeados para el título */
+}
+
+.mostrar-objeto-container {
+  background-color: rgba(255, 255, 255, 0.2); /* Fondo blanco semi-transparente para el contenedor del objeto */
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 500px;
+  border-radius: 10px; /* Bordes redondeados para el contenedor del objeto */
+}
+
+.imagen-objeto {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px; /* Bordes redondeados para la imagen */
+}
+
+.descripcion-objeto {
+  margin-top: 20px;
+}

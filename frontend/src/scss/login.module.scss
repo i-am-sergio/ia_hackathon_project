@@ -1,9 +1,5 @@
 @import "./constants.scss";
 
-body {
-    background: map-get($background, background-gradient);
-    font-family: sans-serif;
-}
 
 .container {
     display: flex;

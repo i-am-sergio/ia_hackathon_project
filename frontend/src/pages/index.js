@@ -1,5 +1,7 @@
 import Register from "./RegisterPage";
+import Login from "./LoginPage";
 
 export {
-    Register,
-  };
+  Register,
+  Login,
+};

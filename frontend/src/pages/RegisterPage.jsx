@@ -34,26 +34,24 @@ function RegisterPage() {
       username,
       email,
       password,
-      confirmPassword,
       firstName,
       lastName,
       termsAccepted,
     } = formData;
-  
+
     return (
       username !== "" &&
       email !== "" &&
       password !== "" &&
-      confirmPassword !== "" &&
       firstName !== "" &&
       lastName !== "" &&
       termsAccepted
     );
   }, [formData]);
-  
+
   useEffect(() => {
     setIsButtonDisabled(!isFormValid());
-  }, [formData, isFormValid]);   
+  }, [formData, isFormValid]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -63,7 +61,7 @@ function RegisterPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <img src={applogo} className={styles.appLogo}/>
+        <img src={applogo} className={styles.appLogo} />
         <div className={styles.text}>Registrarse</div>
         <div className={styles.underline}></div>
       </div>
@@ -102,17 +100,6 @@ function RegisterPage() {
           />
         </div>
         <div className={styles.input}>
-          <BsKeyFill className={styles.img} />
-          <input
-            type="password"
-            className={styles.entry}
-            placeholder="Confirmar contraseña"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className={styles.input}>
           <FaUserCircle className={styles.img} />
           <input
             type="text"
@@ -136,16 +123,16 @@ function RegisterPage() {
         </div>
         <div className={styles.input}>
           <BsGenderAmbiguous className={styles.img} />
-            <select
-              name="gender"
-              className={styles.entry}
-              value={formData.gender}
-              onChange={handleInputChange}
-            >
-              <option value="male">Masculino</option>
-              <option value="female">Femenino</option>
-              <option value="other">Otro</option>
-            </select>
+          <select
+            name="gender"
+            className={styles.entry}
+            value={formData.gender}
+            onChange={handleInputChange}
+          >
+            <option value="male">Masculino</option>
+            <option value="female">Femenino</option>
+            <option value="other">Otro</option>
+          </select>
         </div>
         <div className={styles.input}>
           <label>
@@ -175,7 +162,7 @@ function RegisterPage() {
       </div>
       <div className={styles.powered}>
         <div className={styles.image} onClick={handleSubmit}>
-          <img src={logo} className={styles.logo}/>
+          <img src={logo} className={styles.logo} />
         </div>
         <div className={styles.message}>DEVOPSX100PRE</div>
       </div>

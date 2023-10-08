@@ -1,14 +1,8 @@
-import './App.css';
-import { Register } from './pages';
-import InfoPage from './pages/InfoPage';
-
+import { Register, Login } from './pages';
 function App() {
-
-  return (
+return (
     <>
-      <div>
-        <InfoPage />
-      </div>
+      <Register />
     </>
   )
 }

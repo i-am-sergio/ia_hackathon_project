@@ -5,10 +5,7 @@ function App() {
 
   return (
     <>
-      <div>
-        <Login />
-
-      </div>
+      <Register />
     </>
   )
 }

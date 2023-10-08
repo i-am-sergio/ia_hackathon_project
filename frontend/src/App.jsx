@@ -1,18 +1,15 @@
 import './App.css'
 import CameraCapture from './components/CameraCapture'
-import InicioPage from './pages/InicioPage'
-
-// process.env.REACT_APP_SERVER_URL || 
-// export const URL = "http://localhost:3000";
-export const URL = "https://0qh1s63v-3000.brs.devtunnels.ms";
-
-// import { Login, Register } from './pages';
+// import InicioPage from './pages/InicioPage'
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CollectionPage from './pages/CollectionPage';
 import Navigation from './components/Navigation';
 import InfoPage from './pages/InfoPage';
+
+// export const URL = "http://localhost:3000";
+export const URL = "https://0qh1s63v-3000.brs.devtunnels.ms";
 
 function App() {
 return (
@@ -24,6 +21,7 @@ return (
           <Route path='/register' element={<RegisterPage/>} />
           <Route path='/collection' element={<CollectionPage/>} />
           <Route path='/info' element={<InfoPage/>} />
+          <Route path='/camera' element={<CameraCapture/>} />
         </Routes>
       </BrowserRouter>
     </>

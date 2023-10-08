@@ -13,7 +13,10 @@ const storage = multer.memoryStorage(); // Almacenar el archivo en la memoria
 const upload = multer({ storage: storage });
 
 app.use(cors({
-  origin: 'https://0qh1s63v-5173.brs.devtunnels.ms', // Reemplaza con el dominio de tu aplicación web
+  origin: [
+    'https://0qh1s63v-5173.brs.devtunnels.ms',
+    'https://0qh1s63v-5173.brs.devtunnels.ms/camera'
+  ], // Reemplaza con el dominio de tu aplicación web
   credentials: true,
 }));
 

@@ -53,3 +53,49 @@ Luego, ejecuta el siguiente comando en tu entorno conda "Flowers":
 Si la instalación se realizó con éxito, deberías ver una salida que indica si se ha encontrado una GPU o si TensorFlow está utilizando la CPU. Como esta salida:
 
 ![Salida de ejecución de Prueba de GPU](img/test.png)
+
+## Creación de Modelo de Convolución para Clasificar Flores con Deep Learning
+
+En este proyecto, hemos creado un modelo de aprendizaje profundo utilizando redes neuronales convolucionales (CNN) para clasificar flores. Aquí te guiaré a través de los pasos principales del proceso.
+
+### Descarga y Organización de la Base de Datos
+
+1. Descargamos la base de datos de flores desde el siguiente enlace: [Base de Datos de Flores](https://www.kaggle.com/datasets/jonathanflorez/extended-flowers-recognition/).
+
+2. Luego, organizamos los datos en cuatro carpetas: Original, Test, Train y Validate. Esto se hace para dividir el conjunto de datos en entrenamiento, prueba y validación.
+
+### Entrenamiento del Modelo
+
+Ejecutamos el código del archivo `model.py` en nuestro entorno virtual de Anaconda utilizando el siguiente comando:
+
+```bash
+python model.py
+```
+
+También ejecutamos el archivo `model2.py` de la misma manera:
+
+```bash
+python model2.py
+```
+![Salida de ejecución de Model2](img/Execution_model_2.png)
+
+### Comparación de Modelos
+
+Después de ejecutar los modelos, generamos dos gráficos utilizando la biblioteca Matplotlib para comparar su rendimiento.
+
+Modelo 1: Gráfico del Modelo 1
+![Grafico de Model1](img/Figure_1.png)
+
+Modelo 2: Gráfico del Modelo 2
+![Grafico de Model2](img//test(1).png)
+Basándonos en la comparación de estos gráficos, decidimos que el modelo 1 es el más adecuado para nuestra tarea de clasificación de flores.
+
+### Exportación del Modelo a Formato JSON
+Para usar el modelo en el backend de nuestra aplicación, lo exportamos a formato JSON. Creamos una carpeta llamada "Output" y utilizamos el siguiente comando en nuestro entorno virtual anaconda:
+
+```bash
+tensorflowjs_converter --input_format keras flowers.h5 Output
+```
+Esto nos proporciona los archivos necesarios para utilizar el modelo en nuestra aplicación.
+
+Con esto, hemos completado con éxito la creación y evaluación de nuestro modelo de convolución para clasificar flores.

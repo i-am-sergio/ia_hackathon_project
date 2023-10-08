@@ -20,6 +20,7 @@ app.use(cors({
 // Configuración para servir archivos estáticos (como tu archivo HTML)
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/model', express.static(path.join(__dirname, 'model')));
+app.use('/modelflowers', express.static(path.join(__dirname, 'modelflowers')));
 
 // Ruta para manejar solicitudes GET a la raíz y enviar el archivo HTML
 app.get('/', (req, res) => {

@@ -50,7 +50,7 @@ function RegisterPage() {
     event.preventDefault();
     console.log("Datos del formulario:", formData);
     try {
-      const response = await fetch(`http://localhost:3000/register`, {
+      const response = await fetch(`${URL}/register`, {
         method: 'POST',
         body: JSON.stringify(formData), // Convierte los datos a JSON
         headers: {

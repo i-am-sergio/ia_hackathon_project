@@ -22,48 +22,17 @@ const allowedOrigins = [
   ''
 ];
 
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (!origin || allowedOrigins.includes(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Acceso no permitido por política de CORS'));
-//     }
-//   },
-//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//   credentials: true,
-//   optionsSuccessStatus: 204,
-// };
 
 const corsOptions = {
-  origin: '*', // O puede especificar dominios específicos como ['http://example.com', 'https://example2.com']
+  origin: '*', // dominios como ['http://example.com', 'https://example2.com']
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204,
 };
 
+// MIDDLEWARES
 app.use(cors(corsOptions));
-
 app.use(express.json());
-// app.use(cors(corsOptions));
-/*
-app.use(cors({
-  origin: [
-    'https://4755h63w-5173.brs.devtunnels.ms/',
-    'https://4755h63w-5173.brs.devtunnels.ms/camera',
-    'https://4755h63w-5173.brs.devtunnels.ms/register',
-    'https://0qh1s63v-5173.brs.devtunnels.ms',
-    'https://0qh1s63v-5173.brs.devtunnels.ms/camera',
-    'https://4755h63w-3000.brs.devtunnels.ms/register',
-    'https://4755h63w-3000.brs.devtunnels.ms',
-  ], // Reemplaza con el dominio de tu aplicación web
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  optionsSuccessStatus: 204,
-}));
-*/
-
-
 
 // Configuración para servir archivos estáticos (como tu archivo HTML)
 app.use(express.static(path.join(__dirname, 'public')));
@@ -118,23 +87,14 @@ app.post('/upload', upload.single('photo'), (req, res) => {
 
 app.post('/register', async (req, res) => {
   try {
-    // console.log(req.body);
-    // const userData = req.body;
     const { username, email, password, firstName, lastName, gender } = req.body;
-
-    // const requiredFields = ['username', 'email', 'password', 'firstName', 'lastName', 'gender'];
-    
-    // const missingFields = requiredFields.filter(field => !userData[field]);
-    // if (missingFields.length > 0) {
-    //   return res.status(400).json({ error: `Faltan campos obligatorios: ${missingFields.join(", ")}` });
-    // }
-    // const usuario = await UsuariosModel.create(userData);
-
     const newUsuario = await UsuariosModel({username, email, password, firstName, lastName, gender}); 
     
     // codigo para insertar en usuario en mongodb
+    // ...
+    
     console.log("Usuario registrado con éxito:", newUsuario);
-    res.status(201)
+    res.sendStatus(201);
   } catch (error) {
     console.error("Error al registrar usuario:", error);
     res.status(500).json({ error: "Error interno del servidor", details: error.message });

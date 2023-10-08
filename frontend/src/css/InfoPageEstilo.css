@@ -1,39 +1,51 @@
-.pagina-info {
+/* .pagina-info { */
+  /* background-image: url('https://elbuho.pe/wp-content/uploads/2022/10/arequipa-observatorio-rayos-gamma-referencial.jpg'); */
+
+  /* Estilo para el fondo de toda la página */
+body {
   background-image: url('https://elbuho.pe/wp-content/uploads/2022/10/arequipa-observatorio-rayos-gamma-referencial.jpg');
   background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-color: rgba(0, 0, 128, 0.7); /* Color de fondo azul oscuro semi-transparente */
-  color: #ffffff; /* Color de texto blanco */
-
-  padding: 20px; /* Espaciado interior para el contenido */
-  text-align: center; /* Centra el contenido en el centro de la página */
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.pagina-info h1 {
+/* Estilo para la página de información */
+.pagina-info {
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px; /* Ajusta el ancho de la página a tu preferencia */
+}
+
+/* Estilo para el título del objeto */
+h1 {
   font-size: 24px;
-  margin: 0 0 20px;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.2); /* Fondo blanco semi-transparente para el título */
-  border-radius: 5px; /* Bordes redondeados para el título */
+  margin-top: 0;
 }
 
-.mostrar-objeto-container {
-  background-color: rgba(255, 255, 255, 0.2); /* Fondo blanco semi-transparente para el contenedor del objeto */
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 500px;
-  border-radius: 10px; /* Bordes redondeados para el contenedor del objeto */
-}
-
+/* Estilo para la imagen del objeto */
 .imagen-objeto {
-  display: block;
-  margin: 0 auto;
   max-width: 100%;
   height: auto;
-  border-radius: 5px; /* Bordes redondeados para la imagen */
 }
 
+/* Estilo para la descripción del objeto */
 .descripcion-objeto {
-  margin-top: 20px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Estilo para el contenedor del objeto */
+.contenedor-informacion-objeto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }

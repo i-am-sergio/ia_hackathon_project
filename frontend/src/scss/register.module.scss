@@ -19,6 +19,7 @@ body {
     align-items: center;
     gap: 9px;
     width: 100%;
+    max-width: 600px;
     margin-top: 30px;
     .text {
       color: map-get($colors, text);
@@ -47,7 +48,8 @@ body {
       display: flex;
       align-items: center;
       margin: auto;
-      width: 480px;
+      width: 90%;
+      max-width: 480px;
       height: 80px;
       background: $white_d;
       border-radius: 6px;
@@ -55,8 +57,9 @@ body {
         margin: 0 30px;
       }
       .entry {
+        width: 90%;
+        max-width: 400px;
         height: 50px;
-        width: 400px;
         background: transparent;
         border: none;
         outline: none;
@@ -155,20 +158,30 @@ body {
     .appLogo {
       width: 8vw;
     }
+    .underline {
+      width: 10vw;
+      height: 1vw;
+    }
   }
   .inputs {
     margin-top: 5vh;
     .input {
       width: 100%;
+      .img{
+        margin: 0 3vw;
+      }
       .entry {
         width: 100%;
-        font-size: 4vw;
+        font-size: 3vw;
+      }
+      label{
+        font-size: 3vw;
       }
     }
   }
   .forgot_password {
     margin-top: 3vh;
-    font-size: 4vw;
+    font-size: 2vw;
   }
   .submit_container {
     margin: 5vh auto;

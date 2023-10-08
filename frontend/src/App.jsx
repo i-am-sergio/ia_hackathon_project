@@ -7,8 +7,7 @@ import CollectionPage from './pages/CollectionPage';
 import Navigation from './components/Navigation';
 
 function App() {
-
-  return (
+return (
     <>
       <BrowserRouter>
         <Navigation />

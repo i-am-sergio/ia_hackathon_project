@@ -2,7 +2,7 @@ import React from "react";
 
 function InicioPage() {
   function print() {
-    alert("algo aqui");
+    alert("algo aqui"+456);
   }
 
   return (

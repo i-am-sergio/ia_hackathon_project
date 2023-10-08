@@ -81,3 +81,5 @@ plt.show()
 
 #save the model :
 model.save('./flowers2.h5')
+
+#tensorflowjs_converter --input_format keras flowers2.h5 Output2

@@ -5,7 +5,7 @@ import "../css/collectionPage.css"
 import "../css/ImageCollection.css"
 import imagen from "../assets/img2.jpg";
 
-function Collection() {
+export default function CollectionPage() {
   
   //Agregamos las imagenes de la base de datos
   const imageList = [
@@ -28,4 +28,3 @@ function Collection() {
     </div>
   );
 }
-export default Collection;

@@ -14,13 +14,15 @@ function InfoPage() {
   // Detectamos y actualizamos infoObjeto
 
   return (
-    <div className="pagina-info">
-      <h1>Detector de Objetos</h1>
-      <MostrarObjetoInfo
-        nombre={infoObjeto.nombre}
-        imagenURL={infoObjeto.imagenURL}
-        descripcion={infoObjeto.descripcion}
-      />
+    <div className="flex items-center justify-center h-screen">
+      <div className="pagina-info justify-center">
+        <h1>Detector de Objetos</h1>
+        <MostrarObjetoInfo
+          nombre={infoObjeto.nombre}
+          imagenURL={infoObjeto.imagenURL}
+          descripcion={infoObjeto.descripcion}
+        />
+      </div>
     </div>
   );
 }

@@ -134,22 +134,10 @@ function RegisterPage() {
             <option value="other">Otro</option>
           </select>
         </div>
-        <div className={styles.input}>
-          <label>
-            <input
-              type="checkbox"
-              name="termsAccepted"
-              checked={formData.termsAccepted}
-              onChange={handleInputChange}
-              className={styles.img}
-            />
-            Aceptar términos y condiciones
-          </label>
-        </div>
       </div>
-      <div className={styles.forgot_password}>
+      {/* <div className={styles.forgot_password}>
         ¿Olvidaste la contraseña? <span>Haz clic aquí</span>
-      </div>
+      </div> */}
       <div className={styles.submit_container}>
         <div
           className={`${styles.submit} ${isButtonDisabled ? styles.gray : ""}`}

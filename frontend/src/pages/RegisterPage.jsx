@@ -5,17 +5,18 @@ import { BsKeyFill, BsGenderAmbiguous } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect, useCallback } from "react";
 import { logo, applogo } from "../assets";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import {URL} from "../App";
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    confirmPassword: "",
     firstName: "",
     lastName: "",
-    gender: "Otro",
-    termsAccepted: false,
+    gender: "Masculino",
   });
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -30,22 +31,14 @@ function RegisterPage() {
   };
 
   const isFormValid = useCallback(() => {
-    const {
-      username,
-      email,
-      password,
-      firstName,
-      lastName,
-      termsAccepted,
-    } = formData;
+    const { username, email, password, firstName, lastName } = formData;
 
     return (
       username !== "" &&
       email !== "" &&
       password !== "" &&
       firstName !== "" &&
-      lastName !== "" &&
-      termsAccepted
+      lastName !== ""
     );
   }, [formData]);
 
@@ -53,10 +46,25 @@ function RegisterPage() {
     setIsButtonDisabled(!isFormValid());
   }, [formData, isFormValid]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    //envio a backend
+    console.log("Datos del formulario:", formData);
+    try {
+      const response = await fetch(`${URL}/register`, {
+        method: 'POST',
+        body: JSON.stringify(formData), // Convierte los datos a JSON
+        headers: {
+          'Content-Type': 'application/json', // Especifica que se está enviando JSON
+        },
+      });
+      console.log('Respuesta del servidor:', response);
+      alert('Respuesta del servidor:' + await response.text());
+    } catch (error) {
+      console.error('Error al enviar la imagen al servidor:', error);
+      alert('Error al enviar la imagen al servidor:' + error);
+    }
   };
+  
 
   return (
     <div className={styles.container}>
@@ -135,9 +143,6 @@ function RegisterPage() {
           </select>
         </div>
       </div>
-      {/* <div className={styles.forgot_password}>
-        ¿Olvidaste la contraseña? <span>Haz clic aquí</span>
-      </div> */}
       <div className={styles.submit_container}>
         <div
           className={`${styles.submit} ${isButtonDisabled ? styles.gray : ""}`}
@@ -146,7 +151,7 @@ function RegisterPage() {
         >
           Registrarse
         </div>
-        <div className={`${styles.submit} ${styles.gray}`}>Iniciar Sesión</div>
+        <Link to="/" className={`${styles.submit}`}>Iniciar Sesión</Link>
       </div>
       <div className={styles.powered}>
         <div className={styles.image} onClick={handleSubmit}>

@@ -50,7 +50,7 @@ function RegisterPage() {
     event.preventDefault();
     console.log("Datos del formulario:", formData);
     try {
-      const response = await fetch(`${URL}/register`, {
+      const response = await fetch(`http://localhost:3000/register`, {
         method: 'POST',
         body: JSON.stringify(formData), // Convierte los datos a JSON
         headers: {
@@ -60,8 +60,8 @@ function RegisterPage() {
       console.log('Respuesta del servidor:', response);
       alert('Respuesta del servidor:' + await response.text());
     } catch (error) {
-      console.error('Error al enviar la imagen al servidor:', error);
-      alert('Error al enviar la imagen al servidor:' + error);
+      console.error('Error al enviar datos de registro al servidor:', error);
+      alert('Error al enviar nuevo usuario al servidor:' + error);
     }
   };
   

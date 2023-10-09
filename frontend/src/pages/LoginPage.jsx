@@ -5,8 +5,10 @@ import { useState, useEffect, useCallback } from "react";
 import { logo, applogo } from "../assets";
 import { Link, useNavigate } from "react-router-dom";
 import {URL} from "../App";
+import { useUser } from '../UserHooking';
 
 function LoginPage() {
+  const { login } = useUser(); 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -63,9 +65,9 @@ function LoginPage() {
       });
     
       if (response.status === 200) {
-        //const userData = await response.json();
-        // Redirigir
-        navigate('/collection');
+        const userData = await response.json();
+        login(userData);
+        navigate('/camera');
       } else {
         const text = await response.text();
         console.error('Error al autenticar al usuario:', text);

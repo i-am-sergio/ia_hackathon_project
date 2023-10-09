@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MostrarObjetoInfo from '../components/MostrarObjetoInfo';
 import '../css/InfoPageEstilo.css'; // Importa tus estilos CSS
+import { useUser } from '../UserContext';
 
 
 function InfoPage() {
@@ -12,10 +13,14 @@ function InfoPage() {
   });
 
   // Detectamos y actualizamos infoObjeto
-
+  const { user } = useUser();
+  if (!user) {
+    return <div>No hay usuario logueado.</div>;
+  }
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="pagina-info justify-center">
+        <p>Nombre de usuario: {user.userName} Correo: {user.userEmail}</p>
         <h1>Detector de Objetos</h1>
         <MostrarObjetoInfo
           nombre={infoObjeto.nombre}

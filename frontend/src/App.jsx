@@ -7,9 +7,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CollectionPage from './pages/CollectionPage';
 import Navigation from './components/Navigation';
 import InfoPage from './pages/InfoPage';
-import { UserProvider } from './UserContext'; 
+import { UserProvider } from './UserContext';
 
- export const URL = "https://4755h63w-3000.brs.devtunnels.ms";
+export const URL = "http://localhost:3000";
 //correo: "wildshyni@gmail.com"
 //password: 123
 
@@ -18,8 +18,8 @@ function App() {
     <UserProvider>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<LoginPage/>} />
-          <Route path='/register' element={<RegisterPage/>} />
+          <Route path='/' element={<LoginPage />} />
+          <Route path='/register' element={<RegisterPage />} />
           <Route
             path='/collection'
             element={

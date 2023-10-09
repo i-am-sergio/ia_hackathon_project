@@ -19,10 +19,24 @@ router.get("/collections/:id", () => {
   console.log("/collections/:id endpoint");
 });
 
+router.post("/check_email", async (req, res) => {
+  UsuariosModel.findOne({ email: req.body.email })
+  .then((existingUser) => {
+    if (existingUser) {
+      return res.status(409).json({ error: "El correo ya tiene una cuenta existente." });
+    }
+    res.sendStatus(200);
+  })
+  .catch((error) => {
+    console.error("Error al verificar el correo electrónico:", error);
+    res.status(500).json({ error: "Error interno del servidor", details: error.message });
+  });
+});
+
 router.post("/register", async (req, res) => {
   try {
     const { username, email, password, firstName, lastName, gender } = req.body;
-    const newUsuario = await UsuariosModel({
+    const newUsuario = await UsuariosModel.create({
       username,
       email,
       password,
@@ -30,12 +44,8 @@ router.post("/register", async (req, res) => {
       lastName,
       gender,
     });
-
-    // codigo para insertar en usuario en mongodb
-    // ...
-
-    console.log("Usuario registrado con éxito:", newUsuario);
-    res.sendStatus(201);
+    //console.log("Usuario registrado con éxito:", newUsuario);
+    res.status(201).json(newUsuario);
   } catch (error) {
     console.error("Error al registrar usuario:", error);
     res

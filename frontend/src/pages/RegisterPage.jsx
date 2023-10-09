@@ -6,10 +6,11 @@ import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect, useCallback } from "react";
 import { logo, applogo } from "../assets";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import {URL} from "../App";
 
 function RegisterPage() {
+  const [error, setError] = useState("");
+  const [showError, setShowError] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -24,6 +25,17 @@ function RegisterPage() {
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
     const newValue = type === "checkbox" ? checked : value;
+    if (name === "email") {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailIsValid = emailPattern.test(newValue);
+      if (!emailIsValid) {
+        setError("Ingrese un correo válido.");
+        setShowError(true);
+      } else {
+        setError("");
+        setShowError(false);
+      }
+    }
     setFormData({
       ...formData,
       [name]: newValue,
@@ -48,20 +60,44 @@ function RegisterPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Datos del formulario:", formData);
+    if (!isFormValid()) {
+      setError("Rellena todos los campos.");
+      setShowError(true);
+      return;
+    }
     try {
-      const response = await fetch(`${URL}/register`, {
+      const response = await fetch(`${URL}/check_email`, {
         method: 'POST',
-        body: JSON.stringify(formData), // Convierte los datos a JSON
+        body: JSON.stringify({ email: formData.email }),
         headers: {
-          'Content-Type': 'application/json', // Especifica que se está enviando JSON
+          'Content-Type': 'application/json',
         },
       });
-      console.log('Respuesta del servidor:', response);
-      alert('Respuesta del servidor:' + await response.text());
+  
+      if (response.status === 409) {
+        setError("El correo ya tiene una cuenta existente.");
+        setShowError(true);
+        return;
+      }
+
+      const registrationResponse = await fetch(`${URL}/register`, {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (registrationResponse.status === 201) {
+        console.log('Usuario registrado con éxito:', registrationResponse);
+      } else {
+        setError("Error en el servidor al registrar el usuario.");
+        setShowError(true);
+      }
+
     } catch (error) {
       console.error('Error al enviar datos de registro al servidor:', error);
-      alert('Error al enviar nuevo usuario al servidor:' + error);
+      setError("Error en el servidor.");
+      setShowError(true);
     }
   };
   
@@ -143,15 +179,22 @@ function RegisterPage() {
           </select>
         </div>
       </div>
+      <div className={styles.forgot_password}>
+        {showError && <span>{error}</span>}
+      </div>
       <div className={styles.submit_container}>
         <div
-          className={`${styles.submit} ${isButtonDisabled ? styles.gray : ""}`}
+          className={`${styles.submit} ${
+            isButtonDisabled || showError ? styles.gray : ""
+          }`}
           onClick={handleSubmit}
-          disabled={isButtonDisabled}
+          disabled={isButtonDisabled || showError}
         >
           Registrarse
         </div>
-        <Link to="/" className={`${styles.submit}`}>Iniciar Sesión</Link>
+        <Link to="/" className={`${styles.submit}`}>
+          Iniciar Sesión
+        </Link>
       </div>
       <div className={styles.powered}>
         <div className={styles.image} onClick={handleSubmit}>

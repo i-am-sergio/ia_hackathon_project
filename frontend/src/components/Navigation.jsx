@@ -30,11 +30,11 @@ function Navigation() {
             Collection
           </Link>
         </li>
-        <li className={styles.navItem}>
+        {/*<li className={styles.navItem}>
           <Link to="/info" className={styles.link}>
             InfoPage
           </Link>
-        </li>
+        </li>*/}
         {user && (
           <li className={styles.navItem}>
             <button onClick={logout} className={styles.link}>

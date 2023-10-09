@@ -1,0 +1,56 @@
+@import "./constants.scss";
+
+.image_container {
+    text-align: center;
+    margin: 20px;
+    position: relative;
+    .collection_image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .details_container {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: map-get($colors, main);
+        padding: 10px;
+        color: $white;
+        border-radius: 0 0 8px 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .image_name {
+            font-size: 16px;
+            color: $white_d;
+            margin-top: 8px;
+        }
+        .details_button {
+            color: $white_d;
+            background-color: map-get($colors, main);
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px 16px;
+            margin-top: 8px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            &:hover {
+                background: map-get($background, transparent);
+            }
+        }
+    }
+}
+@media (max-width: 600px) {
+    .image_container {
+        margin: 10px;
+    }
+
+    .image_name {
+        font-size: 14px;
+        margin-right: 0;
+    }
+}

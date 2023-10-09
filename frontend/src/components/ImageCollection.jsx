@@ -1,20 +1,26 @@
-// ImageCollection.jsx
-import '../css/ImageCollection.css';
+import styles from '../scss/imageCollextion.module.scss';
+import {URL} from "../App";
+import { Link } from 'react-router-dom';
 
 const ImageCollection = ({ imageUrl, imageName }) => {
-  //Funcion que mostrara los detalles - vista nelzon
+  // Función que mostrará los detalles
   const handleVerDetalles = () => {
     console.log(`Ver detalles de ${imageName}`);
   };
 
   return (
-    <div className="image-container">
-      <img src={imageUrl} alt={imageName} className="collection-image" />
-      <div className="details-container">
-        <p className="image-name">{imageName}</p>
-        <button onClick={handleVerDetalles} className="details-button">
+    <div className={styles.image_container}>
+      <img src={`${URL}${imageUrl}`} alt={imageName} className={styles.collection_image} />
+      <div className={styles.details_container}>
+        <div className={styles.image_name}>
+          <p>{imageName}</p>
+        </div>
+        <Link
+          to={`/info?imageUrl=${encodeURIComponent(imageUrl)}&imageName=${encodeURIComponent(imageName)}`}
+          className={styles.details_button}
+        >
           Ver Detalles
-        </button>
+        </Link>
       </div>
     </div>
   );

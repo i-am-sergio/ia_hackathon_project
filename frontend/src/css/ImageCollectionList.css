@@ -1,27 +1,26 @@
-
 /* ImageCollectionList.css */
 
 .image-collection-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-/* Estilo para cada ImageCollection en la lista */
-.image-collection {
-  width: 30%; /* Ajusta el ancho según tus necesidades */
-  margin: 10px;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .image-collection {
-    width: 45%; /* Reduzca el ancho en pantallas más pequeñas */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
-}
-
-@media (max-width: 480px) {
+  
+  /* Estilo para cada ImageCollection en la lista */
   .image-collection {
-    width: 100%; /* Ocupa el ancho completo en pantallas muy pequeñas */
+    width: 30%; /* Ajusta el ancho según tus necesidades */
+    margin: 10px;
   }
-}
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .image-collection {
+      width: 45%; /* Reduzca el ancho en pantallas más pequeñas */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .image-collection {
+      width: 100%; /* Ocupa el ancho completo en pantallas muy pequeñas */
+    }
+  }

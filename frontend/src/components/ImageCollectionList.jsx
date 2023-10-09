@@ -8,8 +8,8 @@ const ImageCollectionList = ({ imageList }) => {
       {imageList.map((image, index) => (
         <div key={index} className="image-collection">
           <ImageCollection
-            imageUrl={image.imageUrl}
-            imageName={image.imageName}
+            imageUrl={image.image}
+            imageName={image.predict}
           />
         </div>
       ))}

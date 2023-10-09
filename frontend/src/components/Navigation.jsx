@@ -1,27 +1,51 @@
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { BiMenuAltRight } from "react-icons/bi";
+import { useUser } from "../UserHooking";
+import styles from "../scss/navigation.module.scss";
 
 function Navigation() {
+  const [showNav, setShowNav] = useState(false);
+  const { user, logout } = useUser();
+
+  const toggleNav = () => {
+    setShowNav(!showNav);
+  };
+
+  const navClassName = showNav ? `${styles.nav} ${styles.show}` : styles.nav;
+
   return (
-    <nav className='ml-24'>
-      <ul className='flex'>
-        <li className='mr-4 mt-4 px-2 py-2 rounded-sm bg-slate-300'>
-          <Link to="/">Login</Link>
+    <nav className={navClassName}>
+      <button className={styles.menu_button} onClick={toggleNav}>
+        <BiMenuAltRight className={styles.img} />
+      </button>
+      <ul className={styles.ul}>
+        <li className={styles.navItem}>
+          <Link to="/camera" className={styles.link}>
+            Camera
+          </Link>
         </li>
-        <li className='mr-4 mt-4 px-2 py-2 rounded-sm bg-slate-300'>
-          <Link to="/register">Register</Link>
+        <li className={styles.navItem}>
+          <Link to="/collection" className={styles.link}>
+            Collection
+          </Link>
         </li>
-        <li className='mr-4 mt-4 px-2 py-2 rounded-sm bg-slate-300'>
-          <Link to="/collection">Collection</Link>
+        <li className={styles.navItem}>
+          <Link to="/info" className={styles.link}>
+            InfoPage
+          </Link>
         </li>
-        <li className='mr-4 mt-4 px-2 py-2 rounded-sm bg-slate-300'>
-          <Link to="/info">InfoPage</Link>
-        </li>
-        <li className='mr-4 mt-4 px-2 py-2 rounded-sm bg-slate-300'>
-          <Link to="/camera">Camera</Link>
-        </li>
+        {user && (
+          <li className={styles.navItem}>
+            <button onClick={logout} className={styles.link}>
+              Logout
+            </button>
+          </li>
+        )}
       </ul>
     </nav>
   );
 }
 
 export default Navigation;
+

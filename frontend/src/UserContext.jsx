@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 
 const UserContext = createContext();
 
@@ -15,18 +16,16 @@ export function UserProvider({ children }) {
     setUser(null);
   };
 
+  // Utiliza useMemo para crear el objeto de valor del contexto una vez
+  const contextValue = useMemo(() => ({ user, login, logout }), [user]);
+
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={contextValue}>
       {children}
     </UserContext.Provider>
   );
 }
 
-export function useUser() {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser debe ser utilizado dentro de un UserProvider');
-  }
-  return context;
-}
-
+UserProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

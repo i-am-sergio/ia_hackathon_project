@@ -142,7 +142,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile) {
     .container {
         width: 90%;
         margin-top: 5vh;

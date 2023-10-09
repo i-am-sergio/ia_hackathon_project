@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import {URL} from "../App";
+import axios from 'axios';
 
 const CameraCapture = () => {
   const videoRef = useRef(null);
@@ -17,42 +17,36 @@ const CameraCapture = () => {
       canvas.height = video.videoHeight;
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      const dataURL = canvas.toDataURL('image/png');
+      const dataURL = canvas.toDataURL('image/jpg');
       setPhotoData(dataURL);
       
 
       // Convertir la imagen capturada a Blob
       const blob = await fetch(dataURL).then((res) => res.blob());
-
+      console.log('Tipo MIME:', blob.type);
       // Enviar la imagen al servidor
       sendImageToServer(blob);
     }
   };
 
   const sendImageToServer = async (imageBlob) => {
-    // Crear un objeto FormData y agregar la imagen al cuerpo de la solicitud
     const formData = new FormData();
     formData.append('photo', imageBlob, 'captured_photo.png');
-
+  
     try {
-      // Enviar la solicitud POST al servidor
-      const response = await fetch(`${URL}/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-
+      const response = await axios.post('http://localhost:5000/upload', formData);
+  
       // Manejar la respuesta del servidor si es necesario
       console.log('Respuesta del servidor:', response);
-      alert('Respuesta del servidor:'+ toString(response));
+      alert('Respuesta del servidor:' + JSON.stringify(response.data));
     } catch (error) {
       console.error('Error al enviar la imagen al servidor:', error);
-      alert('Error al enviar la imagen al servidor:'+ error);
+      alert('Error al enviar la imagen al servidor:' + error.message);
     }
   };
 
   const initializeCamera = async () => {
     try {
-      
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = devices.filter(device => device.kind === 'videoinput');
       // Verificar si hay al menos dos cámaras (frontal y posterior)

@@ -12,30 +12,20 @@ const storage = multer.memoryStorage(); // Almacenar el archivo en la memoria
 const upload = multer({ storage: storage });
 
 
-router.get("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.query;
-
     const user = await UsuariosModel.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({ error: "Correo electrónico o contraseña incorrectos" });
+    console.log(user);
+    if (!user || user.password !== password) {
+      return res.status(401).json({ message: 'Credenciales inválidas' });
     }
-
-    const isPasswordValid = await user.comparePassword(password);
-
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: "Correo electrónico o contraseña incorrectos" });
-    }
-
-
-    res.status(200).json({ message: "Inicio de sesión exitoso", user });
+    res.json({ message: 'Inicio de sesión exitoso', user });
   } catch (error) {
-    console.error("Error al iniciar sesión:", error);
-    res.status(500).json({ error: "Error interno del servidor", details: error.message });
+    console.error('Error al buscar usuario:', error);
+    res.status(500).json({ message: 'Error interno' });
   }
 });
-
 
 router.get("/collections/:id", () => {
   console.log("/collections/:id endpoint");
@@ -45,13 +35,13 @@ router.post("/check_email", async (req, res) => {
   UsuariosModel.findOne({ email: req.body.email })
     .then((existingUser) => {
       if (existingUser) {
-        return res.status(409).json({ error: "El correo ya tiene una cuenta existente." });
+        return res.sendStatus(409).json({ error: "El correo ya tiene una cuenta existente." });
       }
       res.sendStatus(200);
     })
     .catch((error) => {
       console.error("Error al verificar el correo electrónico:", error);
-      res.status(500).json({ error: "Error interno del servidor", details: error.message });
+      res.sendStatus(500).json({ error: "Error interno del servidor", details: error.message });
     });
 });
 
@@ -67,11 +57,11 @@ router.post("/register", async (req, res) => {
       gender,
     });
     //console.log("Usuario registrado con éxito:", newUsuario);
-    res.status(201).json(newUsuario);
+    res.sendStatus(201).json(newUsuario);
   } catch (error) {
     console.error("Error al registrar usuario:", error);
     res
-      .status(500)
+      .sendStatus(500)
       .json({ error: "Error interno del servidor", details: error.message });
   }
 });

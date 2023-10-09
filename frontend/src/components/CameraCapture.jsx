@@ -195,42 +195,15 @@ const CameraCapture = () => {
 
   return (
     <div className='h-screen flex flex-col items-center justify-center'>
-        <div style={{ position: 'relative' }} className='px-2'>
-        {/*<p>Nombre de usuario: {user ? user.userName : 'No hay usuario logueado'} Correo: {user ? user.userEmail : 'No hay usuario logueado'}</p>*/}
-
-        <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
-
-        {/* Elementos de fecha y hora superpuestos */}
+      <div style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'white', fontSize: '16px' }}>
-          {new Date().toLocaleString()}
+          {currentTime.toLocaleString()}
           <br />
-          {location && (
-            <>
-              Latitude: {location.latitude}
-              <br />
-              Longitude: {location.longitude}
-              <br />
-              {location.altitude !== null && (
-                <>Altitude: {location.altitude} meters</>
-              )}
-              <br />
-              {temperature !== null && (
-                <>Temperature: {temperature} °C</>
-              )}
-            </>
-          )}
+          Location: {location ? location.city : 'Loading...'}
+          <br />
+          Temperature: {temperature !== null ? temperature : 'Loading...'}
         </div>
-
-    <div style={{ position: 'relative' }}>
       <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
-      <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'white', fontSize: '16px' }}>
-        {currentTime.toLocaleString()}
-        <br />
-        Location: {location ? location.city : 'Loading...'}
-        <br />
-        Temperature: {temperature !== null ? temperature : 'Loading...'}
-      )}
-
       {photoData && (
         <div>
           <p>Preview:</p>
@@ -238,12 +211,10 @@ const CameraCapture = () => {
         </div>
       )}
       <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
-      </div>
       <div className='flex flex-col items-center sm:flex-row my-20'>
         <button className='bg-slate-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300  sm:h-12' onClick={initializeCamera}>Start Camera</button>
         <button className='bg-blue-300 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={handleCapture}>Capture Photo</button>
         <button className='bg-red-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={handleStopCapture}>Stop Camera</button>
-
         {isRearCamera && (
           <button className='bg-green-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={toggleCamera}>
             Rotate Camera
@@ -251,7 +222,7 @@ const CameraCapture = () => {
         )}
       </div>
     </div>
-    
+    </div>
   );
 };
 

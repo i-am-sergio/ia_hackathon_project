@@ -2,9 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useUser } from '../UserHooking';
 import { useNavigate } from "react-router-dom";
 import { URL } from "../App";
-import EXIF from 'exif-js';
 import axios from 'axios';
-
 const CameraCapture = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -12,6 +10,7 @@ const CameraCapture = () => {
   const [isRearCamera, setIsRearCamera] = useState(false);
   const [temperature, setTemperature] = useState(null);
   const [location, setLocation] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   const { user } = useUser();
   const navigate = useNavigate();
@@ -22,25 +21,48 @@ const CameraCapture = () => {
     }
   }, [user, navigate]);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
 
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const getLocation = () => {
     return new Promise((resolve, reject) => {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const { latitude, longitude, altitude } = position.coords;
-            resolve({ latitude, longitude, altitude });
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const apiKey = 'de0eb6890a9d4a079feefc9fa227c2be';
+            const geoUrl = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
+            fetch(geoUrl)
+              .then((response) => response.json())
+              .then((data) => {
+                const city = data.results[0].components.city;
+                resolve({ city,latitude,longitude });
+              })
+              .catch((error) => {
+                console.error('Error al obtener la ciudad:', error);
+                reject(error);
+              });
           },
           (error) => {
+            console.error('Error en la geolocalización:', error);
             reject(error);
           }
         );
       } else {
-        reject('La geolocalización no está disponible en este navegador.');
+        console.error('La geolocalización no está disponible en este navegador.');
+        reject(new Error('Geolocalización no disponible'));
       }
     });
   };
+  
 
   const getWeather = async (latitude, longitude) => {
     const apiKey = '07f7c305df2ff65227a50af1a74782f7';
@@ -59,24 +81,9 @@ const CameraCapture = () => {
       console.error('Error al obtener la temperatura:', error);
     }
   };
-  const getPhotoTime = async (dataURL) => {
-    const image = new Image();
-    image.src = dataURL;
-    image.onload = () => {
-      EXIF.getData(image, function () {
-        const datetime = EXIF.getTag(this, 'DateTimeOriginal');
-        if (datetime) {
-          const date = new Date(datetime);
-          const hour = date.getHours();
-          const minute = date.getMinutes();
-          resolve({ hour, minute });
-        }
-      });
-    };
-  };
 
   const handleCapture = async () => {
-    const video = videoRef.current;
+    const video = videoRef.current; 
     const canvas = canvasRef.current;
 
     if (video) {
@@ -87,104 +94,73 @@ const CameraCapture = () => {
 
       const dataURL = canvas.toDataURL('image/png');
       setPhotoData(dataURL);
-
-      // Convertir la imagen capturada a Blob
       const blob = await fetch(dataURL).then((res) => res.blob());
-
-      // Obtener el username y email de donde sea necesario en tu componente
       const username = user.userName;
       const email = user.userEmail;
-
-      // Esperar a que getLocation y getPhotoTime se resuelvan antes de continuar
-      const location = await getLocation();
-      const phototime = await getPhotoTime(dataURL);
-
-      // Enviar la imagen al servidor junto con username, email, location y phototime
-      sendImageToServer(blob, username, email, location, phototime);
+      try {
+        const location = await getLocation();
+        const phototime = currentTime.toLocaleString();
+        const climaAsString = temperature.toString();
+        sendImageToServer(blob, username, email, location.city, phototime, climaAsString);
+      } catch (error) {
+        console.error('Error al obtener ubicación, temperatura o al enviar la imagen:', error);
+      }
     }
   };
 
 
-  const sendImageToServer = async (imageBlob, username, email, location, phototime) => {
-    // Crear un objeto FormData y agregar la imagen, username y email al cuerpo de la solicitud
+  const sendImageToServer = async (imageBlob, username, email, location, phototime, temperature) => {
     const formData = new FormData();
     formData.append('photo', imageBlob, 'captured_photo.png');
     formData.append('username', username);
     formData.append('email', email);
-    formData.append('location', location); // Agregar la ubicación
-    formData.append('phototime', phototime);
+    formData.append('lugar', location);
+    formData.append('time', phototime);
+    formData.append('clima', temperature);
     try {
       const response = await axios.post('http://localhost:5000/upload', formData);
       formData.append('predict', response.data.message);
-      
       const response2 = await fetch(`${URL}/upload`, {
         method: 'POST',
         body: formData,
       });
-      
-      // Manejar la respuesta del servidor si es necesario
-      console.log('Respuesta de axios: ', response);
-      alert('Respuesta del servidor: ' + response.data.message);
-      console.log('Respuesta de fecth: ', response2);
+      if (response2.ok) {
+        const responseData = await response2.json();
+        const laprediccion = responseData.laprediccion;
+        console.log('Respuesta de axios: ', response);
+        alert('Respuesta del servidor: ' + response.data.message);
+        console.log('Predicción del servidor2:', laprediccion);
+        alert('Predicción del servidor2:' + laprediccion);
+      } else {
+        console.error('Error en la respuesta del servidor:', response.status, response.statusText);
+        alert('Error en la respuesta del servidor:' + response.status + ' ' + response.statusText);
+      }
     } catch (error) {
       console.error('Error al enviar la imagen al servidor:', error);
       alert('Error al enviar la imagen al servidor:' + error.message);
     }
-
-
-
-    // try {
-    //   // Enviar la solicitud POST al servidor
-    //   const response = await fetch(`${URL}/upload`, {
-    //     method: 'POST',
-    //     body: formData,
-    //   });
-
-    //   // Verificar si la respuesta HTTP tiene éxito (código de estado 200)
-    //   if (response.ok) {
-    //     // Obtener los datos de la respuesta como objeto JSON
-    //     const responseData = await response.json();
-
-    //     // Acceder a la propiedad 'laprediccion' y mostrar su valor
-    //     const laprediccion = responseData.laprediccion;
-    //     console.log('Predicción del servidor:', laprediccion);
-    //     alert('Predicción del servidor:' + laprediccion);
-    //   } else {
-    //     console.error('Error en la respuesta del servidor:', response.status, response.statusText);
-    //     alert('Error en la respuesta del servidor:' + response.status + ' ' + response.statusText);
-    //   }
-    // } catch (error) {
-    //   console.error('Error al enviar la imagen al servidor:', error);
-    //   alert('Error al enviar la imagen al servidor:' + error.message);
-    // }
   };
 
 
   const initializeCamera = async () => {
     try {
-
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = devices.filter(device => device.kind === 'videoinput');
-      // Verificar si hay al menos dos cámaras (frontal y posterior)
       if (videoDevices.length >= 2) {
         setIsRearCamera(true);
       } else {
         setIsRearCamera(false);
       }
-
-      // const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: isRearCamera ? 'environment' : 'user',
         },
       });
-
       const video = videoRef.current;
       video.srcObject = stream;
       await video.play();
     } catch (error) {
       console.error('Error accessing camera:', error);
-      alert('Error accessing camera:' + error);
     }
   };
 
@@ -202,23 +178,20 @@ const CameraCapture = () => {
     handleStopCapture();
     initializeCamera();
   };
-
+  
   useEffect(() => {
     initializeCamera();
-
-    // Llamar a getLocation para obtener la ubicación
     getLocation()
       .then((locationData) => {
         setLocation(locationData);
-
-        // Obtener la temperatura utilizando las coordenadas de ubicación
         getWeather(locationData.latitude, locationData.longitude);
       })
       .catch((error) => {
         console.error('Error al obtener la ubicación:', error);
       });
-  }, []); // ComponentDidMount
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
 
   return (
     <div className='h-screen flex flex-col items-center justify-center'>
@@ -248,18 +221,23 @@ const CameraCapture = () => {
           )}
         </div>
 
-        {/* Elementos de fecha y hora superpuestos */}
-        
+    <div style={{ position: 'relative' }}>
+      <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
+      <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'white', fontSize: '16px' }}>
+        {currentTime.toLocaleString()}
+        <br />
+        Location: {location ? location.city : 'Loading...'}
+        <br />
+        Temperature: {temperature !== null ? temperature : 'Loading...'}
+      )}
 
-        {photoData && (
-          <div>
-            <p>Preview:</p>
-            <img src={photoData} alt="Captured" style={{ maxWidth: '100%', maxHeight: '200px' }} />
-          </div>
-        )}
-
-        {/* Hidden canvas element for drawing captured photo */}
-        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+      {photoData && (
+        <div>
+          <p>Preview:</p>
+          <img src={photoData} alt="Captured" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+        </div>
+      )}
+      <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
       </div>
       <div className='flex flex-col items-center sm:flex-row my-20'>
         <button className='bg-slate-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300  sm:h-12' onClick={initializeCamera}>Start Camera</button>

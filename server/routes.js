@@ -66,7 +66,7 @@ router.post("/register", async (req, res) => {
 
 
 router.post('/upload', upload.single('photo'), (req, res) => {
-  const { username, email, location, phototime } = req.body;
+  const { username, email, location, phototime, predict } = req.body;
   const photo = req.file;
   console.log(req.body)
   // Verificar si se recibió una imagen
@@ -82,7 +82,7 @@ router.post('/upload', upload.single('photo'), (req, res) => {
   const imagePath = path.join(__dirname, 'uploads', imageName);
 
   // Generar el valor de 'predict' aquí, por ejemplo:
-  const predict = 'sunflower'; // Reemplaza 'Ejemplo' con tu lógica de generación
+  // const predict = 'sunflower'; // Reemplaza 'Ejemplo' con tu lógica de generación
 
   // Guardar la imagen en el servidor
   fs.writeFile(imagePath, photo.buffer, async (err) => {
@@ -109,7 +109,7 @@ router.post('/upload', upload.single('photo'), (req, res) => {
 
       // Usar el valor de 'predict' como respuesta
       res.json({
-        laprediccion: predict,
+        "laprediccion": predict,
       });
     } catch (error) {
       console.error('Error al crear y guardar el documento de PhotosModel:', error);

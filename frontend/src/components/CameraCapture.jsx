@@ -3,6 +3,8 @@ import { useUser } from '../UserHooking';
 import { useNavigate } from "react-router-dom";
 import { URL } from "../App";
 import EXIF from 'exif-js';
+import axios from 'axios';
+
 const CameraCapture = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -112,29 +114,49 @@ const CameraCapture = () => {
     formData.append('location', location); // Agregar la ubicación
     formData.append('phototime', phototime);
     try {
-      // Enviar la solicitud POST al servidor
-      const response = await fetch(`${URL}/upload`, {
+      const response = await axios.post('http://localhost:5000/upload', formData);
+      formData.append('predict', response.data.message);
+      
+      const response2 = await fetch(`${URL}/upload`, {
         method: 'POST',
         body: formData,
       });
-
-      // Verificar si la respuesta HTTP tiene éxito (código de estado 200)
-      if (response.ok) {
-        // Obtener los datos de la respuesta como objeto JSON
-        const responseData = await response.json();
-
-        // Acceder a la propiedad 'laprediccion' y mostrar su valor
-        const laprediccion = responseData.laprediccion;
-        console.log('Predicción del servidor:', laprediccion);
-        alert('Predicción del servidor:' + laprediccion);
-      } else {
-        console.error('Error en la respuesta del servidor:', response.status, response.statusText);
-        alert('Error en la respuesta del servidor:' + response.status + ' ' + response.statusText);
-      }
+      
+      // Manejar la respuesta del servidor si es necesario
+      console.log('Respuesta de axios: ', response);
+      alert('Respuesta del servidor: ' + response.data.message);
+      console.log('Respuesta de fecth: ', response2);
     } catch (error) {
       console.error('Error al enviar la imagen al servidor:', error);
       alert('Error al enviar la imagen al servidor:' + error.message);
     }
+
+
+
+    // try {
+    //   // Enviar la solicitud POST al servidor
+    //   const response = await fetch(`${URL}/upload`, {
+    //     method: 'POST',
+    //     body: formData,
+    //   });
+
+    //   // Verificar si la respuesta HTTP tiene éxito (código de estado 200)
+    //   if (response.ok) {
+    //     // Obtener los datos de la respuesta como objeto JSON
+    //     const responseData = await response.json();
+
+    //     // Acceder a la propiedad 'laprediccion' y mostrar su valor
+    //     const laprediccion = responseData.laprediccion;
+    //     console.log('Predicción del servidor:', laprediccion);
+    //     alert('Predicción del servidor:' + laprediccion);
+    //   } else {
+    //     console.error('Error en la respuesta del servidor:', response.status, response.statusText);
+    //     alert('Error en la respuesta del servidor:' + response.status + ' ' + response.statusText);
+    //   }
+    // } catch (error) {
+    //   console.error('Error al enviar la imagen al servidor:', error);
+    //   alert('Error al enviar la imagen al servidor:' + error.message);
+    // }
   };
 
 

@@ -38,14 +38,11 @@ function InfoPage() {
       <div className="pagina-info justify-center">
         {infoObjeto ? (
           <>
-            {/*<p>
-              Nombre de usuario: {user ? user.userName : 'No hay usuario logueado'} Correo: {user ? user.userEmail : 'No hay usuario logueado'} uwu: {imageUrl} predict: {imageName}
-            </p>*/}
             <MostrarObjetoInfo
               nombre={infoObjeto.predict}
               imagenURL={infoObjeto.image}
-              Lugar={`Arequipa`}
-              Tiempo={infoObjeto.fecha}
+              Lugar={infoObjeto.lugar}
+              Tiempo={infoObjeto.time}
               Clima={infoObjeto.clima}
             />
           </>

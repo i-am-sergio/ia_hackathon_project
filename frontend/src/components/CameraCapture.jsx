@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { useUser } from '../UserContext';
+import { useRef, useState, useEffect } from 'react';
+import { useUser } from '../UserHooking';
+import { useNavigate } from "react-router-dom";
 import {URL} from "../App";
 
 const CameraCapture = () => {
@@ -98,13 +99,17 @@ const CameraCapture = () => {
     initializeCamera();
   }, []); // ComponentDidMount
   const { user } = useUser();
-  if (!user) {
-    return <div>No hay usuario logueado.</div>;
-  }
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
   return (
     <div>
-      <p>Nombre de usuario: {user.userName} Correo: {user.userEmail}</p>
-      <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
+      <p>Nombre de usuario: {user ? user.userName : 'No hay usuario logueado'} Correo: {user ? user.userEmail : 'No hay usuario logueado'}</p>
+      <video ref={videoRef} style={{ display: 'block', margin: '10px 0'}}></video>
       <button className='bg-slate-400 mx-5' onClick={initializeCamera}>Start Camera</button>
       <button className='bg-blue-300 mx-5' onClick={handleCapture}>Capture Photo</button>
       <button className='bg-red-400 mx-5' onClick={handleStopCapture}>Stop Camera</button>

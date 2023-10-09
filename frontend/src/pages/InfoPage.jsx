@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MostrarObjetoInfo from '../components/MostrarObjetoInfo';
 import '../css/InfoPageEstilo.css'; // Importa tus estilos CSS
-import { useUser } from '../UserContext';
-
+import { useUser } from '../UserHooking';
+import { useNavigate } from "react-router-dom";
 
 function InfoPage() {
   // Estado para almacenar información del objeto
@@ -14,13 +14,17 @@ function InfoPage() {
 
   // Detectamos y actualizamos infoObjeto
   const { user } = useUser();
-  if (!user) {
-    return <div>No hay usuario logueado.</div>;
-  }
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="pagina-info justify-center">
-        <p>Nombre de usuario: {user.userName} Correo: {user.userEmail}</p>
+      <p>Nombre de usuario: {user ? user.userName : 'No hay usuario logueado'} Correo: {user ? user.userEmail : 'No hay usuario logueado'}</p>
         <h1>Detector de Objetos</h1>
         <MostrarObjetoInfo
           nombre={infoObjeto.nombre}

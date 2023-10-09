@@ -7,14 +7,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CollectionPage from './pages/CollectionPage';
 import Navigation from './components/Navigation';
 import InfoPage from './pages/InfoPage';
+import { UserProvider } from './UserContext'; 
 
 // export const URL = "http://localhost:3000";
  export const URL = "https://4755h63w-3000.brs.devtunnels.ms";
 //export const URL = "https://0qh1s63v-3000.brs.devtunnels.ms";
 
 function App() {
-return (
-    <>
+  return (
+    <UserProvider>
       <BrowserRouter>
         <Navigation />
         <Routes>
@@ -25,7 +26,7 @@ return (
           <Route path='/camera' element={<CameraCapture/>} />
         </Routes>
       </BrowserRouter>
-    </>
+    </UserProvider>
   )
 }
 

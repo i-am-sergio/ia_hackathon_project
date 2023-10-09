@@ -19,7 +19,7 @@ router.post('/login', async (req, res) => {
     if (!user || user.password !== password)  {
       return res.status(401).json({ message: 'Correo electrónico o contraseña incorrectos' });
     }
-    res.json({ message: 'Inicio de sesión exitoso', user });
+    res.json({ message: 'Inicio de sesión exitoso', userName: user.username, userEmail: user.email });
   } catch (error) {
     console.error('Error al buscar usuario:', error);
     res.status(500).json({ message: 'Error interno' });
@@ -34,13 +34,13 @@ router.post("/check_email", async (req, res) => {
   UsuariosModel.findOne({ email: req.body.email })
   .then((existingUser) => {
     if (existingUser) {
-      return res.sendStatus(409).json({ error: "El correo ya tiene una cuenta existente." });
+      return res.status(409).json({ error: "El correo ya tiene una cuenta existente." });
     }
     res.sendStatus(200);
   })
   .catch((error) => {
     console.error("Error al verificar el correo electrónico:", error);
-    res.sendStatus(500).json({ error: "Error interno del servidor", details: error.message });
+    res.status(500).json({ error: "Error interno del servidor", details: error.message });
   });
 });
 
@@ -55,13 +55,10 @@ router.post("/register", async (req, res) => {
       lastName,
       gender,
     });
-    //console.log("Usuario registrado con éxito:", newUsuario);
-    res.sendStatus(201).json(newUsuario);
+    res.status(201).json(newUsuario);
   } catch (error) {
     console.error("Error al registrar usuario:", error);
-    res
-      .sendStatus(500)
-      .json({ error: "Error interno del servidor", details: error.message });
+    res.status(500).json({ error: "Error interno del servidor", details: error.message });
   }
 });
 

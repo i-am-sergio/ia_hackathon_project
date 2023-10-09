@@ -91,13 +91,6 @@
             color: map-get($colors, text_darkness);
             cursor: pointer;
         }
-
-        &:hover {
-            span {
-                color: map-get($colors, text);
-                cursor: pointer;
-            }
-        }
     }
 
     .submit_container {
@@ -149,7 +142,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mobile) {
     .container {
         width: 90%;
         margin-top: 5vh;

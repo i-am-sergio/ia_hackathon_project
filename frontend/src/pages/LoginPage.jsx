@@ -3,18 +3,34 @@ import { MdEmail } from "react-icons/md";
 import { BsKeyFill } from "react-icons/bs";
 import { useState, useEffect, useCallback } from "react";
 import { logo, applogo } from "../assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {URL} from "../App";
+import { useUser } from '../UserHooking';
 
-function LoginPage() { // Cambiando el nombre de la función
+function LoginPage() {
+  const { login } = useUser(); 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [error, setError] = useState("");
+  const [showError, setShowError] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    if (name === "email") {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailIsValid = emailPattern.test(value);
+      if (!emailIsValid) {
+        setError("Ingrese un correo válido.");
+        setShowError(true);
+      } else {
+        setError("");
+        setShowError(false);
+      }
+    }
     setFormData({
       ...formData,
       [name]: value,
@@ -30,9 +46,39 @@ function LoginPage() { // Cambiando el nombre de la función
     setIsButtonDisabled(!isFormValid());
   }, [formData, isFormValid]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Envío a backend para la autenticación
+    if (!isFormValid()) {
+      setError("Rellena todos los campos correctamente.");
+      setShowError(true);
+      return;
+    }
+    
+    try {
+      console.log("datos:", formData);
+      const response = await fetch(`${URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: formData.email, password: formData.password}),
+      });
+    
+      if (response.status === 200) {
+        const userData = await response.json();
+        login(userData);
+        navigate('/camera');
+      } else {
+        const text = await response.text();
+        console.error('Error al autenticar al usuario:', text);
+        setError("Correo Electrónico no encontrado o contraseña incorrecta.");
+        setShowError(true);
+      }
+    } catch (error) {
+      console.error('Error al autenticar al usuario:', error);
+      setError("Error en el servidor.");
+      setShowError(true);
+    }
   };
 
   return (
@@ -67,13 +113,15 @@ function LoginPage() { // Cambiando el nombre de la función
         </div>
       </div>
       <div className={styles.forgot_password}>
-        ¿Olvidaste la contraseña? <span>Haz clic aquí</span>
+        {showError && <span>{error}</span>}
       </div>
       <div className={styles.submit_container}>
         <div
-          className={`${styles.submit} ${isButtonDisabled ? styles.gray : ""}`}
+          className={`${styles.submit} ${
+            isButtonDisabled || showError ? styles.gray : ""
+          }`}
           onClick={handleSubmit}
-          disabled={isButtonDisabled}
+          disabled={isButtonDisabled || showError}
         >
           Iniciar Sesión
         </div>

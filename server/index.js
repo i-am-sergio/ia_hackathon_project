@@ -18,8 +18,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+
 // Configuración para servir archivos estáticos (como tu archivo HTML)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 app.use('/model', express.static(path.join(__dirname, 'model')));
 app.use('/modelflowers', express.static(path.join(__dirname, 'modelflowers')));
 
@@ -29,7 +30,7 @@ app.use(routes);
 
 // Ruta para manejar solicitudes GET a la raíz y enviar el archivo HTML
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'uploads'));
 });
 
 // Iniciar el servidor

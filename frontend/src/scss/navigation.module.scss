@@ -1,0 +1,109 @@
+@import "./constants.scss";
+
+body {
+    background: map-get($background, background);
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100vh;
+    background-size: cover;
+}
+
+.nav {
+    background: map-get($background, transparent);
+    padding-bottom: 1rem;
+
+    .ul {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        justify-content: flex-end;
+
+        .navItem {
+            margin-right: 1rem;
+            margin-top: 1rem;
+
+            .link {
+                display: block;
+                padding: 0.5rem 1rem;
+                border-radius: 0.25rem;
+                background: map-get($colors, main);
+                color: $white_d;
+                text-decoration: none;
+                transition: background-color 0.3s ease-in-out;
+
+                &:hover {
+                    color: $white;
+                    background: map-get($background, background);
+                }
+            }
+        }
+    }
+
+    .menu_button {
+        display: none;
+        color: $white;
+        cursor: pointer;
+        border: none;
+        padding: 0;
+        width: auto;
+        position: absolute;
+        right: 1rem;
+        .img {
+            font-size: 2rem;
+            margin: 0.5vh 0.5vw;
+        }
+    }
+    &.show {
+        .ul {
+            display: flex;
+            z-index: 999;
+        }
+    }
+}
+
+@media (max-width: $mobile) {
+    .nav {
+        background: none;
+        .ul {
+            display: none;
+            flex-direction: column;
+            align-items: flex-end;
+            position: absolute;
+            top: 2rem;
+            right: 1rem;
+            border-radius: 0.25rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+            .navItem {
+                margin-right: 0;
+                margin-top: 1rem;
+
+                .link {
+                    padding: 0.5rem 1rem;
+                }
+            }
+        }
+
+        .menu_button {
+            display: block;
+            color: $white;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            background: map-get($colors, main);
+            &:hover {
+                background: map-get($background, background);
+            }
+        }
+        &.show {
+            .ul {
+                align-items:end;
+                background: map-get($background, background);
+                padding-left: 3vw;
+                padding-right: 0.4rem;
+                padding-bottom: 0.4rem;
+            }
+        }
+    }
+}

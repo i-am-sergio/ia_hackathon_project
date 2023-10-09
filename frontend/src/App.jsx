@@ -7,26 +7,49 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CollectionPage from './pages/CollectionPage';
 import Navigation from './components/Navigation';
 import InfoPage from './pages/InfoPage';
+import { UserProvider } from './UserContext';
 
-// export const URL = "http://localhost:3000";
-// export const URL = "https://4755h63w-3000.brs.devtunnels.ms";
-export const URL = "https://m01s1x9z-3000.brs.devtunnels.ms";
-//export const URL = "https://0qh1s63v-3000.brs.devtunnels.ms";
+export const URL = "https://4755h63w-3000.brs.devtunnels.ms";
+//correo: "wildshyni@gmail.com"
+//password: 123
 
 function App() {
   return (
-    <>
+    <UserProvider>
       <BrowserRouter>
-        <Navigation />
         <Routes>
           <Route path='/' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
-          <Route path='/collection' element={<CollectionPage />} />
-          <Route path='/info' element={<InfoPage />} />
-          <Route path='/camera' element={<CameraCapture />} />
+          <Route
+            path='/collection'
+            element={
+              <>
+                <Navigation />
+                <CollectionPage />
+              </>
+            }
+          />
+          <Route
+            path='/info'
+            element={
+              <>
+                <Navigation />
+                <InfoPage />
+              </>
+            }
+          />
+          <Route
+            path='/camera'
+            element={
+              <>
+                <Navigation />
+                <CameraCapture />
+              </>
+            }
+          />
         </Routes>
       </BrowserRouter>
-    </>
+    </UserProvider>
   )
 }
 

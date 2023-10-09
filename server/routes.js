@@ -15,10 +15,9 @@ const upload = multer({ storage: storage });
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await UsuariosModel.findOne({ email });
-    console.log(user);
-    if (!user || user.password !== password) {
-      return res.status(401).json({ message: 'Credenciales inválidas' });
+    const user = await UsuariosModel.findOne({ email }).exec();
+    if (!user || user.password !== password)  {
+      return res.status(401).json({ message: 'Correo electrónico o contraseña incorrectos' });
     }
     res.json({ message: 'Inicio de sesión exitoso', user });
   } catch (error) {

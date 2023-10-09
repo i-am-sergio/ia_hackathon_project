@@ -221,54 +221,59 @@ const CameraCapture = () => {
 
 
   return (
+    <div className='h-screen flex flex-col items-center justify-center'>
+        <div style={{ position: 'relative' }} className='px-2'>
+        {/*<p>Nombre de usuario: {user ? user.userName : 'No hay usuario logueado'} Correo: {user ? user.userEmail : 'No hay usuario logueado'}</p>*/}
 
-    <div style={{ position: 'relative' }}>
-      {/*<p>Nombre de usuario: {user ? user.userName : 'No hay usuario logueado'} Correo: {user ? user.userEmail : 'No hay usuario logueado'}</p>*/}
+        <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
 
-      <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
+        {/* Elementos de fecha y hora superpuestos */}
+        <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'white', fontSize: '16px' }}>
+          {new Date().toLocaleString()}
+          <br />
+          {location && (
+            <>
+              Latitude: {location.latitude}
+              <br />
+              Longitude: {location.longitude}
+              <br />
+              {location.altitude !== null && (
+                <>Altitude: {location.altitude} meters</>
+              )}
+              <br />
+              {temperature !== null && (
+                <>Temperature: {temperature} °C</>
+              )}
+            </>
+          )}
+        </div>
 
-      {/* Elementos de fecha y hora superpuestos */}
-      <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'white', fontSize: '16px' }}>
-        {new Date().toLocaleString()}
-        <br />
-        {location && (
-          <>
-            Latitude: {location.latitude}
-            <br />
-            Longitude: {location.longitude}
-            <br />
-            {location.altitude !== null && (
-              <>Altitude: {location.altitude} meters</>
-            )}
-            <br />
-            {temperature !== null && (
-              <>Temperature: {temperature} °C</>
-            )}
-          </>
+        {/* Elementos de fecha y hora superpuestos */}
+        
+
+        {photoData && (
+          <div>
+            <p>Preview:</p>
+            <img src={photoData} alt="Captured" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+          </div>
+        )}
+
+        {/* Hidden canvas element for drawing captured photo */}
+        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+      </div>
+      <div className='flex flex-col items-center sm:flex-row my-20'>
+        <button className='bg-slate-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300  sm:h-12' onClick={initializeCamera}>Start Camera</button>
+        <button className='bg-blue-300 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={handleCapture}>Capture Photo</button>
+        <button className='bg-red-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={handleStopCapture}>Stop Camera</button>
+
+        {isRearCamera && (
+          <button className='bg-green-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={toggleCamera}>
+            Rotate Camera
+          </button>
         )}
       </div>
-
-      {/* Elementos de fecha y hora superpuestos */}
-      <button className='bg-slate-400 mx-5' onClick={initializeCamera}>Start Camera</button>
-      <button className='bg-blue-300 mx-5' onClick={handleCapture}>Capture Photo</button>
-      <button className='bg-red-400 mx-5' onClick={handleStopCapture}>Stop Camera</button>
-
-      {isRearCamera && (
-        <button className='bg-green-400 mx-5' onClick={toggleCamera}>
-          Toggle Camera (Front/Rear)
-        </button>
-      )}
-
-      {photoData && (
-        <div>
-          <p>Preview:</p>
-          <img src={photoData} alt="Captured" style={{ maxWidth: '100%', maxHeight: '200px' }} />
-        </div>
-      )}
-
-      {/* Hidden canvas element for drawing captured photo */}
-      <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
     </div>
+    
   );
 };
 

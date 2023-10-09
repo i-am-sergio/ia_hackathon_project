@@ -4,11 +4,11 @@ import { BsKeyFill } from "react-icons/bs";
 import { useState, useEffect, useCallback } from "react";
 import { logo, applogo } from "../assets";
 import { Link, useNavigate } from "react-router-dom";
-import {URL} from "../App";
+import { URL } from "../App";
 import { useUser } from '../UserHooking';
 
 function LoginPage() {
-  const { login } = useUser(); 
+  const { login } = useUser();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -53,7 +53,7 @@ function LoginPage() {
       setShowError(true);
       return;
     }
-    
+
     try {
       console.log("datos:", formData);
       const response = await fetch(`${URL}/login`, {
@@ -61,9 +61,9 @@ function LoginPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: formData.email, password: formData.password}),
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
-    
+
       if (response.status === 200) {
         const userData = await response.json();
         login(userData);
@@ -117,9 +117,8 @@ function LoginPage() {
       </div>
       <div className={styles.submit_container}>
         <div
-          className={`${styles.submit} ${
-            isButtonDisabled || showError ? styles.gray : ""
-          }`}
+          className={`${styles.submit} ${isButtonDisabled || showError ? styles.gray : ""
+            }`}
           onClick={handleSubmit}
           disabled={isButtonDisabled || showError}
         >

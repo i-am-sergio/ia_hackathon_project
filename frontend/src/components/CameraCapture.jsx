@@ -1,13 +1,16 @@
 import { useRef, useState, useEffect } from 'react';
 import { useUser } from '../UserHooking';
 import { useNavigate } from "react-router-dom";
-import {URL} from "../App";
+import { URL } from "../App";
 import EXIF from 'exif-js';
 const CameraCapture = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [photoData, setPhotoData] = useState(null);
   const [isRearCamera, setIsRearCamera] = useState(false);
+  const [temperature, setTemperature] = useState(null);
+  const [location, setLocation] = useState(null);
+
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -17,34 +20,43 @@ const CameraCapture = () => {
     }
   }, [user, navigate]);
 
+
+
   const getLocation = () => {
-  return new Promise((resolve, reject) => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
+    return new Promise((resolve, reject) => {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude, altitude } = position.coords;
+            resolve({ latitude, longitude, altitude });
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+      } else {
+        reject('La geolocalización no está disponible en este navegador.');
+      }
+    });
+  };
 
-        // Utiliza las coordenadas (latitude y longitude) para obtener la ciudad desde un servicio de geocodificación inversa
-        const apiKey = 'de0eb6890a9d4a079feefc9fa227c2be'; // Reemplaza con tu clave de API de geocodificación inversa
-        const geoUrl = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
+  const getWeather = async (latitude, longitude) => {
+    const apiKey = '07f7c305df2ff65227a50af1a74782f7';
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
 
-        try {
-          const response = await fetch(geoUrl);
-          const data = await response.json();
-          const city = data.results[0].components.city;
-          resolve(city);
-        } catch (error) {
-          console.error('Error al obtener la ciudad:', error);
-          reject(error);
-        }
-      });
-    } else {
-      console.error('La geolocalización no está disponible en este navegador.');
-      reject('Geolocalización no disponible');
+    try {
+      const response = await fetch(weatherUrl);
+      if (response.ok) {
+        const data = await response.json();
+        const currentTemperature = data.main.temp;
+        setTemperature(currentTemperature);
+      } else {
+        console.error('Error al obtener la temperatura:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error al obtener la temperatura:', error);
     }
-  });
-};
-
+  };
   const getPhotoTime = async (dataURL) => {
     const image = new Image();
     image.src = dataURL;
@@ -55,7 +67,7 @@ const CameraCapture = () => {
           const date = new Date(datetime);
           const hour = date.getHours();
           const minute = date.getMinutes();
-          resolve({ hour, minute }); 
+          resolve({ hour, minute });
         }
       });
     };
@@ -64,32 +76,32 @@ const CameraCapture = () => {
   const handleCapture = async () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-  
+
     if (video) {
       const context = canvas.getContext('2d');
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  
+
       const dataURL = canvas.toDataURL('image/png');
       setPhotoData(dataURL);
-  
+
       // Convertir la imagen capturada a Blob
       const blob = await fetch(dataURL).then((res) => res.blob());
-  
+
       // Obtener el username y email de donde sea necesario en tu componente
       const username = user.userName;
       const email = user.userEmail;
-  
+
       // Esperar a que getLocation y getPhotoTime se resuelvan antes de continuar
       const location = await getLocation();
       const phototime = await getPhotoTime(dataURL);
-  
+
       // Enviar la imagen al servidor junto con username, email, location y phototime
       sendImageToServer(blob, username, email, location, phototime);
     }
   };
-  
+
 
   const sendImageToServer = async (imageBlob, username, email, location, phototime) => {
     // Crear un objeto FormData y agregar la imagen, username y email al cuerpo de la solicitud
@@ -105,12 +117,12 @@ const CameraCapture = () => {
         method: 'POST',
         body: formData,
       });
-  
+
       // Verificar si la respuesta HTTP tiene éxito (código de estado 200)
       if (response.ok) {
         // Obtener los datos de la respuesta como objeto JSON
         const responseData = await response.json();
-  
+
         // Acceder a la propiedad 'laprediccion' y mostrar su valor
         const laprediccion = responseData.laprediccion;
         console.log('Predicción del servidor:', laprediccion);
@@ -124,11 +136,11 @@ const CameraCapture = () => {
       alert('Error al enviar la imagen al servidor:' + error.message);
     }
   };
-  
+
 
   const initializeCamera = async () => {
     try {
-      
+
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = devices.filter(device => device.kind === 'videoinput');
       // Verificar si hay al menos dos cámaras (frontal y posterior)
@@ -150,7 +162,7 @@ const CameraCapture = () => {
       await video.play();
     } catch (error) {
       console.error('Error accessing camera:', error);
-      alert('Error accessing camera:'+ error);
+      alert('Error accessing camera:' + error);
     }
   };
 
@@ -171,12 +183,50 @@ const CameraCapture = () => {
 
   useEffect(() => {
     initializeCamera();
+
+    // Llamar a getLocation para obtener la ubicación
+    getLocation()
+      .then((locationData) => {
+        setLocation(locationData);
+
+        // Obtener la temperatura utilizando las coordenadas de ubicación
+        getWeather(locationData.latitude, locationData.longitude);
+      })
+      .catch((error) => {
+        console.error('Error al obtener la ubicación:', error);
+      });
   }, []); // ComponentDidMount
-  
+
+
   return (
-    <div>
+
+    <div style={{ position: 'relative' }}>
       {/*<p>Nombre de usuario: {user ? user.userName : 'No hay usuario logueado'} Correo: {user ? user.userEmail : 'No hay usuario logueado'}</p>*/}
-      <video ref={videoRef} style={{ display: 'block', margin: '10px 0'}}></video>
+
+      <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
+
+      {/* Elementos de fecha y hora superpuestos */}
+      <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'white', fontSize: '16px' }}>
+        {new Date().toLocaleString()}
+        <br />
+        {location && (
+          <>
+            Latitude: {location.latitude}
+            <br />
+            Longitude: {location.longitude}
+            <br />
+            {location.altitude !== null && (
+              <>Altitude: {location.altitude} meters</>
+            )}
+            <br />
+            {temperature !== null && (
+              <>Temperature: {temperature} °C</>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Elementos de fecha y hora superpuestos */}
       <button className='bg-slate-400 mx-5' onClick={initializeCamera}>Start Camera</button>
       <button className='bg-blue-300 mx-5' onClick={handleCapture}>Capture Photo</button>
       <button className='bg-red-400 mx-5' onClick={handleStopCapture}>Stop Camera</button>

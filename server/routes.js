@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await UsuariosModel.findOne({ email }).exec();
-    if (!user || user.password !== password)  {
+    if (!user || user.password !== password) {
       return res.status(401).json({ message: 'Correo electrónico o contraseña incorrectos' });
     }
     res.json({ message: 'Inicio de sesión exitoso', userName: user.username, userEmail: user.email });
@@ -33,16 +33,16 @@ router.get("/collections/:id", () => {
 
 router.post("/check_email", async (req, res) => {
   UsuariosModel.findOne({ email: req.body.email })
-  .then((existingUser) => {
-    if (existingUser) {
-      return res.status(409).json({ error: "El correo ya tiene una cuenta existente." });
-    }
-    res.sendStatus(200);
-  })
-  .catch((error) => {
-    console.error("Error al verificar el correo electrónico:", error);
-    res.status(500).json({ error: "Error interno del servidor", details: error.message });
-  });
+    .then((existingUser) => {
+      if (existingUser) {
+        return res.status(409).json({ error: "El correo ya tiene una cuenta existente." });
+      }
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.error("Error al verificar el correo electrónico:", error);
+      res.status(500).json({ error: "Error interno del servidor", details: error.message });
+    });
 });
 
 router.post("/register", async (req, res) => {
@@ -90,9 +90,9 @@ router.post('/upload', upload.single('photo'), (req, res) => {
       console.error('Error al guardar la imagen:', err);
       return res.status(500).send('Error interno al guardar la imagen');
     }
-  
+
     console.log('Imagen guardada con éxito:', imagePath);
-  
+
     try {
       // Crear un documento de PhotosModel con username, email, predict y la ruta de la imagen
       const newPhoto = new PhotosModel({
@@ -103,10 +103,10 @@ router.post('/upload', upload.single('photo'), (req, res) => {
         location,
         phototime,
       });
-  
+
       // Guardar el documento en MongoDB y esperar a que se complete
       await newPhoto.save();
-  
+
       // Usar el valor de 'predict' como respuesta
       res.json({
         laprediccion: predict,

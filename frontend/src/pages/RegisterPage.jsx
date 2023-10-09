@@ -5,10 +5,11 @@ import { BsKeyFill, BsGenderAmbiguous } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect, useCallback } from "react";
 import { logo, applogo } from "../assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {URL} from "../App";
 
 function RegisterPage() {
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,9 +20,7 @@ function RegisterPage() {
     lastName: "",
     gender: "Masculino",
   });
-
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
     const newValue = type === "checkbox" ? checked : value;
@@ -35,7 +34,7 @@ function RegisterPage() {
         setError("");
         setShowError(false);
       }
-    }
+    } 
     setFormData({
       ...formData,
       [name]: newValue,
@@ -89,6 +88,7 @@ function RegisterPage() {
       });
       if (registrationResponse.status === 201) {
         console.log('Usuario registrado con éxito:', registrationResponse);
+        navigate('/');
       } else {
         setError("Error en el servidor al registrar el usuario.");
         setShowError(true);

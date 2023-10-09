@@ -91,13 +91,6 @@
             color: map-get($colors, text_darkness);
             cursor: pointer;
         }
-
-        &:hover {
-            span {
-                color: map-get($colors, text);
-                cursor: pointer;
-            }
-        }
     }
 
     .submit_container {

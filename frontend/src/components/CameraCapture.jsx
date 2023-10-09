@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useUser } from '../UserHooking';
 import { useNavigate } from "react-router-dom";
 import { URL } from "../App";
+import axios from 'axios';
 const CameraCapture = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -117,15 +118,19 @@ const CameraCapture = () => {
     formData.append('time', phototime);
     formData.append('clima', temperature);
     try {
-      const response = await fetch(`${URL}/upload`, {
+      const response = await axios.post('http://localhost:5000/upload', formData);
+      formData.append('predict', response.data.message);
+      const response2 = await fetch(`${URL}/upload`, {
         method: 'POST',
         body: formData,
       });
-      if (response.ok) {
-        const responseData = await response.json();
+      if (response2.ok) {
+        const responseData = await response2.json();
         const laprediccion = responseData.laprediccion;
-        console.log('Predicción del servidor:', laprediccion);
-        alert('Predicción del servidor:' + laprediccion);
+        console.log('Respuesta de axios: ', response);
+        alert('Respuesta del servidor: ' + response.data.message);
+        console.log('Predicción del servidor2:', laprediccion);
+        alert('Predicción del servidor2:' + laprediccion);
       } else {
         console.error('Error en la respuesta del servidor:', response.status, response.statusText);
         alert('Error en la respuesta del servidor:' + response.status + ' ' + response.statusText);
@@ -189,6 +194,32 @@ const CameraCapture = () => {
   
 
   return (
+    <div className='h-screen flex flex-col items-center justify-center'>
+        <div style={{ position: 'relative' }} className='px-2'>
+        {/*<p>Nombre de usuario: {user ? user.userName : 'No hay usuario logueado'} Correo: {user ? user.userEmail : 'No hay usuario logueado'}</p>*/}
+
+        <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
+
+        {/* Elementos de fecha y hora superpuestos */}
+        <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'white', fontSize: '16px' }}>
+          {new Date().toLocaleString()}
+          <br />
+          {location && (
+            <>
+              Latitude: {location.latitude}
+              <br />
+              Longitude: {location.longitude}
+              <br />
+              {location.altitude !== null && (
+                <>Altitude: {location.altitude} meters</>
+              )}
+              <br />
+              {temperature !== null && (
+                <>Temperature: {temperature} °C</>
+              )}
+            </>
+          )}
+        </div>
 
     <div style={{ position: 'relative' }}>
       <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
@@ -198,14 +229,6 @@ const CameraCapture = () => {
         Location: {location ? location.city : 'Loading...'}
         <br />
         Temperature: {temperature !== null ? temperature : 'Loading...'}
-      </div>
-      <button className='bg-slate-400 mx-5' onClick={initializeCamera}>Start Camera</button>
-      <button className='bg-blue-300 mx-5' onClick={handleCapture}>Capture Photo</button>
-      <button className='bg-red-400 mx-5' onClick={handleStopCapture}>Stop Camera</button>
-      {isRearCamera && (
-        <button className='bg-green-400 mx-5' onClick={toggleCamera}>
-          Toggle Camera (Front/Rear)
-        </button>
       )}
 
       {photoData && (
@@ -215,7 +238,20 @@ const CameraCapture = () => {
         </div>
       )}
       <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+      </div>
+      <div className='flex flex-col items-center sm:flex-row my-20'>
+        <button className='bg-slate-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300  sm:h-12' onClick={initializeCamera}>Start Camera</button>
+        <button className='bg-blue-300 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={handleCapture}>Capture Photo</button>
+        <button className='bg-red-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={handleStopCapture}>Stop Camera</button>
+
+        {isRearCamera && (
+          <button className='bg-green-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={toggleCamera}>
+            Rotate Camera
+          </button>
+        )}
+      </div>
     </div>
+    
   );
 };
 

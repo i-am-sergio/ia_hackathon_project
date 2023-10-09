@@ -64,7 +64,7 @@ router.post("/register", async (req, res) => {
 
 
 router.post('/upload', upload.single('photo'), (req, res) => {
-  const { username, email, lugar, time, clima } = req.body;
+  const { username, email, lugar, time, clima, predict } = req.body;
   const photo = req.file;
   if (!photo) {
     return res.status(400).send('No se recibió ninguna imagen');
@@ -72,8 +72,7 @@ router.post('/upload', upload.single('photo'), (req, res) => {
   const fileId = uuidv4();
   const imageName = `${fileId}_captured_photo.png`;
   const imagePath = path.join(__dirname, 'uploads', imageName);
-  const predict = 'sunflower';
-  fs.writeFile(imagePath, photo.buffer, (err) => {
+  fs.writeFile(imagePath, photo.buffer, async (err) => {
     if (err) {
       console.error('Error al guardar la imagen:', err);
       return res.status(500).send('Error interno al guardar la imagen');

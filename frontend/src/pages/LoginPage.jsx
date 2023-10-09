@@ -3,7 +3,6 @@ import { MdEmail } from "react-icons/md";
 import { BsKeyFill } from "react-icons/bs";
 import { useState, useEffect, useCallback } from "react";
 import { logo, applogo } from "../assets";
-import { Link } from "react-router-dom";
 
 function LoginPage() { // Cambiando el nombre de la función
   const [formData, setFormData] = useState({
@@ -12,22 +11,9 @@ function LoginPage() { // Cambiando el nombre de la función
   });
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [error, setError] = useState("");
-  const [showError, setShowError] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    if (name === "email") {
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailIsValid = emailPattern.test(value);
-      if (!emailIsValid) {
-        setError("Ingrese un correo válido.");
-        setShowError(true);
-      } else {
-        setError("");
-        setShowError(false);
-      }
-    }
     setFormData({
       ...formData,
       [name]: value,
@@ -43,21 +29,19 @@ function LoginPage() { // Cambiando el nombre de la función
     setIsButtonDisabled(!isFormValid());
   }, [formData, isFormValid]);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (!isFormValid()) {
       setError("Rellena todos los campos.");
       setShowError(true);
       return;
     }
+
     try {
-      // L
-      setError("Correo Electrónico no encontrado o contraseña incorrecta.");
-      setShowError(true);
-    } catch (error) {
-      console.error('Error al autenticar al usuario:', error);
-      setError("Error en el servidor.");
-      setShowError(true);
+      const response = await fetch(`${URL}/login)`, {
+        method: 'GET',
+        body: JSON.stringify({})
+      };
     }
   };
 
@@ -93,7 +77,7 @@ function LoginPage() { // Cambiando el nombre de la función
         </div>
       </div>
       <div className={styles.forgot_password}>
-        {showError && <span>{error}</span>}
+        ¿Olvidaste la contraseña? <span>Haz clic aquí</span>
       </div>
       <div className={styles.submit_container}>
         <div
@@ -103,7 +87,7 @@ function LoginPage() { // Cambiando el nombre de la función
         >
           Iniciar Sesión
         </div>
-        <Link to="/register" className={`${styles.submit}`}>Registrarse</Link>
+        <div className={`${styles.submit} ${styles.gray}`}>Registrarse</div>
       </div>
       <div className={styles.powered}>
         <div className={styles.image} onClick={handleSubmit}>

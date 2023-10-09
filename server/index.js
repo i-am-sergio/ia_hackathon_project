@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const routes = require("./routes")
-const connectDB = require("./data"); 
+const connectDB = require("./data");
 
 const app = express();
 const puerto = 3000; // Puedes cambiar el número de puerto según tus preferencias
@@ -25,6 +25,8 @@ app.use('/modelflowers', express.static(path.join(__dirname, 'modelflowers')));
 
 app.use(routes);
 
+
+
 // Ruta para manejar solicitudes GET a la raíz y enviar el archivo HTML
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -39,3 +41,4 @@ app.listen(puerto, () => {
     console.error("Error de conexión a la base de datos:", error);
   });
 });
+

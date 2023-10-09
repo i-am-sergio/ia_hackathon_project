@@ -12,25 +12,47 @@ const storage = multer.memoryStorage(); // Almacenar el archivo en la memoria
 const upload = multer({ storage: storage });
 
 
-router.get("/login", () => {
-  console.log("/login endpoint");
+router.get("/login", async (req, res) => {
+  try {
+    const { email, password } = req.query;
+
+    const user = await UsuariosModel.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({ error: "Correo electrónico o contraseña incorrectos" });
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Correo electrónico o contraseña incorrectos" });
+    }
+
+
+    res.status(200).json({ message: "Inicio de sesión exitoso", user });
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+    res.status(500).json({ error: "Error interno del servidor", details: error.message });
+  }
 });
+
+
 router.get("/collections/:id", () => {
   console.log("/collections/:id endpoint");
 });
 
 router.post("/check_email", async (req, res) => {
   UsuariosModel.findOne({ email: req.body.email })
-  .then((existingUser) => {
-    if (existingUser) {
-      return res.status(409).json({ error: "El correo ya tiene una cuenta existente." });
-    }
-    res.sendStatus(200);
-  })
-  .catch((error) => {
-    console.error("Error al verificar el correo electrónico:", error);
-    res.status(500).json({ error: "Error interno del servidor", details: error.message });
-  });
+    .then((existingUser) => {
+      if (existingUser) {
+        return res.status(409).json({ error: "El correo ya tiene una cuenta existente." });
+      }
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.error("Error al verificar el correo electrónico:", error);
+      res.status(500).json({ error: "Error interno del servidor", details: error.message });
+    });
 });
 
 router.post("/register", async (req, res) => {
@@ -85,11 +107,11 @@ router.post('/upload', upload.single('photo'), (req, res) => {
     // 1 cargar el model.json
     // 2 Hacer la prediccion
     // 3 Devolver la respuesta
-    
+
     // let respuesta;
     // res.json({
-      //   "laprediccion": respuesta;       
-      // })
+    //   "laprediccion": respuesta;       
+    // })
     res.send('Imagen recibida y procesada con éxito');
   });
 });

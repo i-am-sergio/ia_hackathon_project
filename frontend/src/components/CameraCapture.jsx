@@ -44,7 +44,7 @@ const CameraCapture = () => {
               .then((response) => response.json())
               .then((data) => {
                 const city = data.results[0].components.city;
-                resolve({ city,latitude,longitude });
+                resolve({ city, latitude, longitude });
               })
               .catch((error) => {
                 console.error('Error al obtener la ciudad:', error);
@@ -62,7 +62,7 @@ const CameraCapture = () => {
       }
     });
   };
-  
+
 
   const getWeather = async (latitude, longitude) => {
     const apiKey = '07f7c305df2ff65227a50af1a74782f7';
@@ -83,7 +83,7 @@ const CameraCapture = () => {
   };
 
   const handleCapture = async () => {
-    const video = videoRef.current; 
+    const video = videoRef.current;
     const canvas = canvasRef.current;
 
     if (video) {
@@ -180,7 +180,7 @@ const CameraCapture = () => {
     handleStopCapture();
     initializeCamera();
   };
-  
+
   useEffect(() => {
     initializeCamera();
     getLocation()
@@ -191,14 +191,14 @@ const CameraCapture = () => {
       .catch((error) => {
         console.error('Error al obtener la ubicación:', error);
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
 
   return (
     <div className='h-screen flex flex-col items-center justify-center'>
       <div style={{ position: 'relative' }} className='px-2 pt-24'>
-        <div className='text-white'>
+        <div className='text-white mt-40 pt-32'>
           {currentTime.toLocaleString()}
           <br />
           Location: {location ? location.city : 'Loading...'}
@@ -207,8 +207,8 @@ const CameraCapture = () => {
         </div>
         <video ref={videoRef} style={{ display: 'block', margin: '30px 0' }}></video>
         {photoData && (
-          <div className='px-16'>
-            <p className='text-white'>Preview:</p>
+          <div className='px-16 pt-0 '>
+            <p className='text-white '>Preview:</p>
             <img src={photoData} alt="Captured" style={{ maxWidth: '100%', maxHeight: '200px' }} />
           </div>
         )}

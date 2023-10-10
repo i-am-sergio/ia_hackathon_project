@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { BiMenuAltRight } from "react-icons/bi";
 import { useUser } from "../UserHooking";
 import styles from "../scss/navigation.module.scss";
-
+import { applogo } from "../assets";
+import "../css/log.css";
 function Navigation() {
   const [showNav, setShowNav] = useState(false);
   const { user, logout } = useUser();
@@ -19,7 +20,11 @@ function Navigation() {
       <button className={styles.menu_button} onClick={toggleNav}>
         <BiMenuAltRight className={styles.img} />
       </button>
+
       <ul className={styles.ul}>
+        <div>
+          <img src={applogo} alt="ss" id="logo" />
+        </div>
         <li className={styles.navItem}>
           <Link to="/camera" className={styles.link}>
             Camera

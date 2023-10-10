@@ -108,7 +108,6 @@ const CameraCapture = () => {
     }
   };
 
-
   const sendImageToServer = async (imageBlob, username, email, location, phototime, temperature) => {
     const formData = new FormData();
     formData.append('photo', imageBlob, 'captured_photo.png');
@@ -119,28 +118,31 @@ const CameraCapture = () => {
     formData.append('clima', temperature);
     try {
       const response = await axios.post('http://localhost:5000/upload', formData);
-      formData.append('predict', response.data.message);
-      const response2 = await fetch(`${URL}/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-      if (response2.ok) {
-        const responseData = await response2.json();
-        const laprediccion = responseData.laprediccion;
-        console.log('Respuesta de axios: ', response);
-        alert('Respuesta del servidor: ' + response.data.message);
-        console.log('Predicción del servidor2:', laprediccion);
-        alert('Predicción del servidor2:' + laprediccion);
+      if (response.data.message !== 'noprediction') {
+        formData.append('predict', response.data.message);
+        const response2 = await fetch(`${URL}/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+        if (response2.ok) {
+          const responseData = await response2.json();
+          const laprediccion = responseData.laprediccion;
+          console.log('Respuesta de axios: ', response);
+          alert('Respuesta del servidor: ' + response.data.message);
+          console.log('Predicción del servidor2:', laprediccion);
+          alert('Predicción del servidor2:' + laprediccion);
+        } else {
+          console.error('Error en la respuesta del servidor:', response.status, response.statusText);
+          alert('Error en la respuesta del servidor:' + response.status + ' ' + response.statusText);
+        }
       } else {
-        console.error('Error en la respuesta del servidor:', response.status, response.statusText);
-        alert('Error en la respuesta del servidor:' + response.status + ' ' + response.statusText);
+        console.log('No prediction, skipping second upload.');
       }
     } catch (error) {
       console.error('Error al enviar la imagen al servidor:', error);
       alert('Error al enviar la imagen al servidor:' + error.message);
     }
   };
-
 
   const initializeCamera = async () => {
     try {
@@ -195,23 +197,25 @@ const CameraCapture = () => {
 
   return (
     <div className='h-screen flex flex-col items-center justify-center'>
-      <div style={{ position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'white', fontSize: '16px' }}>
+      <div style={{ position: 'relative' }} className='px-2 pt-24'>
+        <div className='text-white'>
           {currentTime.toLocaleString()}
           <br />
           Location: {location ? location.city : 'Loading...'}
           <br />
           Temperature: {temperature !== null ? temperature : 'Loading...'}
         </div>
-      <video ref={videoRef} style={{ display: 'block', margin: '10px 0' }}></video>
-      {photoData && (
-        <div>
-          <p>Preview:</p>
-          <img src={photoData} alt="Captured" style={{ maxWidth: '100%', maxHeight: '200px' }} />
-        </div>
-      )}
-      <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
-      <div className='flex flex-col items-center sm:flex-row my-20'>
+        <video ref={videoRef} style={{ display: 'block', margin: '30px 0' }}></video>
+        {photoData && (
+          <div className='px-16'>
+            <p className='text-white'>Preview:</p>
+            <img src={photoData} alt="Captured" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+          </div>
+        )}
+        <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+      </div>
+
+      <div className='flex flex-col items-center sm:flex-row mt-10'>
         <button className='bg-slate-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300  sm:h-12' onClick={initializeCamera}>Start Camera</button>
         <button className='bg-blue-300 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={handleCapture}>Capture Photo</button>
         <button className='bg-red-400 w-40 h-16 m-2 hover:bg-transparent text-white font-bold py-2 px-4 border border-blue-200 rounded-2xl transition duration-300 sm:h-12' onClick={handleStopCapture}>Stop Camera</button>
@@ -221,7 +225,6 @@ const CameraCapture = () => {
           </button>
         )}
       </div>
-    </div>
     </div>
   );
 };

@@ -72,7 +72,7 @@ router.post('/upload', upload.single('photo'), (req, res) => {
   const fileId = uuidv4();
   const imageName = `${fileId}_captured_photo.png`;
   const imagePath = path.join(__dirname, 'uploads', imageName);
-  fs.writeFile(imagePath, photo.buffer, async (err) => {
+  fs.writeFile(imagePath, photo.buffer, (err) => {
     if (err) {
       console.error('Error al guardar la imagen:', err);
       return res.status(500).send('Error interno al guardar la imagen');

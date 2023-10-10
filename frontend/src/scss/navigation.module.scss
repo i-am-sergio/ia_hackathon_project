@@ -1,5 +1,10 @@
 @import "./constants.scss";
 
+.logito {
+    max-width: 8%;
+    height: auto;
+}
+
 body {
     background: map-get($background, background);
     font-family: sans-serif;
@@ -9,6 +14,7 @@ body {
     min-height: 100vh;
     background-size: cover;
 }
+
 
 .nav {
     background: map-get($background, transparent);
@@ -20,9 +26,13 @@ body {
         padding: 0;
         justify-content: flex-end;
 
+
+
+
         .navItem {
             margin-right: 1rem;
             margin-top: 1rem;
+
 
             .link {
                 display: block;
@@ -41,6 +51,7 @@ body {
         }
     }
 
+
     .menu_button {
         display: none;
         color: $white;
@@ -50,11 +61,13 @@ body {
         width: auto;
         position: absolute;
         right: 1rem;
+
         .img {
             font-size: 2rem;
             margin: 0.5vh 0.5vw;
         }
     }
+
     &.show {
         .ul {
             display: flex;
@@ -63,9 +76,11 @@ body {
     }
 }
 
+
 @media (max-width: $mobile) {
     .nav {
         background: none;
+
         .ul {
             display: none;
             flex-direction: column;
@@ -92,13 +107,15 @@ body {
             border-radius: 0.25rem;
             cursor: pointer;
             background: map-get($colors, main);
+
             &:hover {
                 background: map-get($background, background);
             }
         }
+
         &.show {
             .ul {
-                align-items:end;
+                align-items: end;
                 background: map-get($background, background);
                 padding-left: 3vw;
                 padding-right: 0.4rem;

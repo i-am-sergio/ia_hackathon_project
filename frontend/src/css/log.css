@@ -1,0 +1,16 @@
+#logo {
+    height: 60px;
+
+}
+
+div #logo {
+    padding-right: 850px;
+    padding-top: 10px;
+    max-width: 100%;
+}
+
+@media only screen and (max-width: 380px) {
+    div #logo {
+        display: none;
+    }
+}

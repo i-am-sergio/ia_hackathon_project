@@ -117,7 +117,7 @@ const CameraCapture = () => {
     formData.append('time', phototime);
     formData.append('clima', temperature);
     try {
-      const response = await axios.post('http://localhost:5000/upload', formData);
+      const response = await axios.post('https://0qh1s63v-5000.brs.devtunnels.ms/upload', formData);
       if (response.data.message !== 'noprediction') {
         formData.append('predict', response.data.message);
         const response2 = await fetch(`${URL}/upload`, {

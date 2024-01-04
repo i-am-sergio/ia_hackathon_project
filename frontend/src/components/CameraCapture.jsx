@@ -197,7 +197,7 @@ const CameraCapture = () => {
 
   return (
     <div className='h-screen flex flex-col items-center justify-center'>
-      <div style={{ position: 'relative' }} className='px-2 pt-24'>
+      <div style={{ position: 'relative' }} className='px-2 pt-1'>
         <div className='text-white mt-40 pt-32'>
           {currentTime.toLocaleString()}
           <br />
